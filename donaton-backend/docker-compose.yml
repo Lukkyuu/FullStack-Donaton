@@ -1,0 +1,126 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: donaton-postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: donaton
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - donaton-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: donaton-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - donaton-network
+
+  ms-auth:
+    build: 
+      context: ./ms-auth
+    container_name: donaton-ms-auth
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/donaton
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SERVER_PORT=8081
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - donaton-network
+
+  ms-donacion:
+    build: 
+      context: ./ms-donacion
+    container_name: donaton-ms-donacion
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/donaton
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SERVER_PORT=8082
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - donaton-network
+
+  ms-logistica:
+    build: 
+      context: ./ms-logistica
+    container_name: donaton-ms-logistica
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/donaton
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SERVER_PORT=8083
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - donaton-network
+
+  ms-necesidad:
+    build: 
+      context: ./ms-necesidad
+    container_name: donaton-ms-necesidad
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/donaton
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SERVER_PORT=8084
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - donaton-network
+
+  ms-gateway:
+    build: 
+      context: ./ms-gateway
+    container_name: donaton-ms-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - AUTH_HOST=ms-auth
+      - DONACION_HOST=ms-donacion
+      - LOGISTICA_HOST=ms-logistica
+      - NECESIDAD_HOST=ms-necesidad
+    depends_on:
+      - ms-auth
+      - ms-donacion
+      - ms-logistica
+      - ms-necesidad
+    networks:
+      - donaton-network
+
+volumes:
+  postgres_data:
+
+networks:
+  donaton-network:
+    driver: bridge
