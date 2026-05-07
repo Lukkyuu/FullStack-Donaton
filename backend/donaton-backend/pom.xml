@@ -37,6 +37,9 @@
 		<module>ms-donacion</module>
 		<module>ms-logistica</module>
 		<module>ms-necesidad</module>
+		<module>ms-usuarios</module>
+		<module>ms-matching</module>
+		<module>ms-notificaciones</module>
 		<module>ms-gateway</module>
 	</modules>
 

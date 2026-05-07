@@ -23,4 +23,28 @@ public class AuthController {
     public ResponseEntity<AuthDTO.AuthResponse> register(@Valid @RequestBody AuthDTO.RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        return ResponseEntity.ok().body(new LogoutResponse("Sesión cerrada correctamente"));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthDTO.AuthResponse> refresh() {
+        String email = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(authService.refreshToken(email));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<AuthDTO.AuthResponse> me() {
+        String email = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(authService.refreshToken(email));
+    }
+
+    public static class LogoutResponse {
+        public String message;
+        public LogoutResponse(String message) {
+            this.message = message;
+        }
+    }
 }

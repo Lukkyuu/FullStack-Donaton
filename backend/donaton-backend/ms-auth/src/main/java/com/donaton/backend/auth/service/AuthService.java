@@ -34,10 +34,8 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        String token = jwtUtil.generateToken(userDetails);
-
         Usuario usuario = usuarioRepository.findByEmail(request.getEmail()).orElseThrow();
+        String token = jwtUtil.generateToken(usuario);
         return new AuthDTO.AuthResponse(token, usuario.getEmail(), usuario.getNombre(), usuario.getRol().name());
     }
 
@@ -55,10 +53,8 @@ public class AuthService {
                 .rol(rol)
                 .build();
 
-        usuarioRepository.save(usuario);
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        String token = jwtUtil.generateToken(userDetails);
+        usuario = usuarioRepository.save(usuario);
+        String token = jwtUtil.generateToken(usuario);
         return new AuthDTO.AuthResponse(token, usuario.getEmail(), usuario.getNombre(), usuario.getRol().name());
     }
 
@@ -72,5 +68,11 @@ public class AuthService {
         }
 
         return rol;
+    }
+
+    public AuthDTO.AuthResponse refreshToken(String currentEmail) {
+        Usuario usuario = usuarioRepository.findByEmail(currentEmail).orElseThrow();
+        String newToken = jwtUtil.generateToken(usuario);
+        return new AuthDTO.AuthResponse(newToken, usuario.getEmail(), usuario.getNombre(), usuario.getRol().name());
     }
 }

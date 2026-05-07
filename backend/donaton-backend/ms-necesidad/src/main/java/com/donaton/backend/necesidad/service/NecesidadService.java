@@ -46,6 +46,32 @@ public class NecesidadService {
                 .stream().map(this::toResponse).collect(Collectors.toList());
     }
 
+    public NecesidadDTO.Response obtenerPorId(Long id) {
+        Necesidad necesidad = necesidadRepository.findById(id).orElseThrow();
+        return toResponse(necesidad);
+    }
+
+    public List<NecesidadDTO.Response> listarPublicas() {
+        return listarActivas();
+    }
+
+    public NecesidadDTO.Response actualizar(Long id, NecesidadDTO.Request request) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario beneficiario = usuarioRepository.findByEmail(email).orElseThrow();
+
+        Necesidad necesidad = necesidadRepository.findById(id).orElseThrow();
+        
+        if (!necesidad.getBeneficiario().getId().equals(beneficiario.getId())) {
+            throw new RuntimeException("No tienes permiso para editar esta necesidad");
+        }
+
+        necesidad.setDescripcion(request.getDescripcion());
+        necesidad.setCategoria(request.getCategoria());
+        necesidad.setCantidadRequerida(request.getCantidadRequerida());
+
+        return toResponse(necesidadRepository.save(necesidad));
+    }
+
     public NecesidadDTO.Response actualizarEstado(Long id, String estado) {
         Necesidad necesidad = necesidadRepository.findById(id).orElseThrow();
         necesidad.setEstado(Necesidad.EstadoNecesidad.valueOf(estado.toUpperCase()));

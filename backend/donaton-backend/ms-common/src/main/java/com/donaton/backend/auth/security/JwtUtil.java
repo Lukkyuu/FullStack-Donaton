@@ -1,5 +1,6 @@
 package com.donaton.backend.auth.security;
 
+import com.donaton.backend.auth.model.Usuario;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,18 @@ public class JwtUtil {
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .subject(userDetails.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public String generateToken(Usuario usuario) {
+        return Jwts.builder()
+                .claim("role", usuario.getRol().name())
+                .claim("nombre", usuario.getNombre())
+                .claim("email", usuario.getEmail())
+                .subject(String.valueOf(usuario.getId()))
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey())

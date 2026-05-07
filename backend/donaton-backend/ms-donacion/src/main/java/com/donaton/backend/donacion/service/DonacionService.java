@@ -58,6 +58,48 @@ public class DonacionService {
                 .map(this::toResponse).collect(Collectors.toList());
     }
 
+    public DonacionDTO.Response obtenerPorId(Long id) {
+        Donacion donacion = donacionRepository.findById(id).orElseThrow();
+        return toResponse(donacion);
+    }
+
+    public DonacionDTO.Response actualizar(Long id, DonacionDTO.Request request) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario donante = usuarioRepository.findByEmail(email).orElseThrow();
+
+        Donacion donacion = donacionRepository.findById(id).orElseThrow();
+        
+        if (!donacion.getDonante().getId().equals(donante.getId())) {
+            throw new RuntimeException("No tienes permiso para editar esta donacion");
+        }
+
+        CentroAcopio centro = null;
+        if (request.getCentroAcopioId() != null) {
+            centro = centroAcopioRepository.findById(request.getCentroAcopioId()).orElseThrow();
+        }
+
+        donacion.setDescripcion(request.getDescripcion());
+        donacion.setCategoria(request.getCategoria());
+        donacion.setCantidad(request.getCantidad());
+        donacion.setCentroAcopio(centro);
+
+        return toResponse(donacionRepository.save(donacion));
+    }
+
+    public DonacionDTO.Response cancelar(Long id) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario donante = usuarioRepository.findByEmail(email).orElseThrow();
+
+        Donacion donacion = donacionRepository.findById(id).orElseThrow();
+        
+        if (!donacion.getDonante().getId().equals(donante.getId())) {
+            throw new RuntimeException("No tienes permiso para cancelar esta donacion");
+        }
+
+        donacion.setEstado(Donacion.EstadoDonacion.CANCELADA);
+        return toResponse(donacionRepository.save(donacion));
+    }
+
     public DonacionDTO.Response actualizarEstado(Long id, String estado) {
         Donacion donacion = donacionRepository.findById(id).orElseThrow();
         donacion.setEstado(Donacion.EstadoDonacion.valueOf(estado.toUpperCase()));

@@ -40,3 +40,15 @@ spring:
           uri: http://${NECESIDAD_HOST:localhost}:8084
           predicates:
             - Path=/api/necesidades/**
+        - id: usuarios-service
+          uri: http://${USUARIOS_HOST:localhost}:8085
+          predicates:
+            - Path=/api/usuarios/**
+        - id: matching-service
+          uri: http://${MATCHING_HOST:localhost}:8086
+          predicates:
+            - Path=/api/matching/**
+        - id: notificaciones-service
+          uri: http://${NOTIFICACIONES_HOST:localhost}:8087
+          predicates:
+            - Path=/api/notificaciones/**

@@ -33,6 +33,24 @@ public class DonacionController {
         return ResponseEntity.ok(donacionService.listarPorDonante());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<DonacionDTO.Response> obtenerPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(donacionService.obtenerPorId(id));
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('DONANTE')")
+    public ResponseEntity<DonacionDTO.Response> actualizar(
+            @PathVariable Long id, @RequestBody DonacionDTO.Request request) {
+        return ResponseEntity.ok(donacionService.actualizar(id, request));
+    }
+
+    @PostMapping("/{id}/cancelar")
+    @PreAuthorize("hasRole('DONANTE')")
+    public ResponseEntity<DonacionDTO.Response> cancelar(@PathVariable Long id) {
+        return ResponseEntity.ok(donacionService.cancelar(id));
+    }
+
     @PatchMapping("/{id}/estado")
     @PreAuthorize("hasRole('ADMIN') or hasRole('LOGISTICA')")
     public ResponseEntity<DonacionDTO.Response> actualizarEstado(

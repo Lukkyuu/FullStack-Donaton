@@ -33,6 +33,23 @@ public class NecesidadController {
         return ResponseEntity.ok(necesidadService.listarPorBeneficiario());
     }
 
+    @GetMapping("/publicas")
+    public ResponseEntity<List<NecesidadDTO.Response>> listarPublicas() {
+        return ResponseEntity.ok(necesidadService.listarPublicas());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<NecesidadDTO.Response> obtenerPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(necesidadService.obtenerPorId(id));
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ORGANIZACION')")
+    public ResponseEntity<NecesidadDTO.Response> actualizar(
+            @PathVariable Long id, @RequestBody NecesidadDTO.Request request) {
+        return ResponseEntity.ok(necesidadService.actualizar(id, request));
+    }
+
     @PatchMapping("/{id}/estado")
     @PreAuthorize("hasRole('ADMIN') or hasRole('ORGANIZACION')")
     public ResponseEntity<NecesidadDTO.Response> actualizarEstado(
