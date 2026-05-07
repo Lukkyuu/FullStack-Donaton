@@ -1,0 +1,22 @@
+Enlace al Repositorio Principal del Proyecto:
+https://github.com/TU_USUARIO/donaton-backend (Reemplaza con tu URL)
+
+Descripción de los componentes (monorepo):
+El proyecto sigue una arquitectura de monorepositorio en Maven (Multi-módulo) donde cada carpeta representa un componente independiente:
+
+1. Frontend:
+https://github.com/TU_USUARIO/donaton-frontend (Si tienes un repositorio separado, ponlo aquí)
+Contiene la interfaz de usuario desarrollada (React/Angular/Vue).
+
+2. Backend For Frontend (BFF):
+https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-gateway
+Actúa como punto de entrada (API Gateway / BFF) centralizando las llamadas del frontend y manejando la distribución y CORS.
+
+3. Microservicios:
+- Auth: https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-auth (Gestión de Identidad y Seguridad)
+- Donaciones: https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-donacion (Lógica de Donaciones y RabbitMQ)
+- Logística: https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-logistica (Centros de acopio y asignaciones)
+- Necesidad: https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-necesidad (Gestión de beneficiarios)
+
+4. Librería Compartida (Arquetipo Base):
+- Common: https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-common (Modelos de datos y configuración compartida)
