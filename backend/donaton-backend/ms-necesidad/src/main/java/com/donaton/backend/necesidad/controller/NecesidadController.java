@@ -17,6 +17,7 @@ public class NecesidadController {
     private final NecesidadService necesidadService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ORGANIZACION')")
     public ResponseEntity<NecesidadDTO.Response> crear(@RequestBody NecesidadDTO.Request request) {
         return ResponseEntity.ok(necesidadService.crear(request));
     }
@@ -27,12 +28,13 @@ public class NecesidadController {
     }
 
     @GetMapping("/mis-necesidades")
+    @PreAuthorize("hasRole('ORGANIZACION') or hasRole('ADMIN')")
     public ResponseEntity<List<NecesidadDTO.Response>> listarMias() {
         return ResponseEntity.ok(necesidadService.listarPorBeneficiario());
     }
 
     @PatchMapping("/{id}/estado")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('ORGANIZACION')")
     public ResponseEntity<NecesidadDTO.Response> actualizarEstado(
             @PathVariable Long id, @RequestParam String estado) {
         return ResponseEntity.ok(necesidadService.actualizarEstado(id, estado));

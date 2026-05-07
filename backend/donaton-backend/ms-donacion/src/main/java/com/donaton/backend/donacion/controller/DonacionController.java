@@ -17,6 +17,7 @@ public class DonacionController {
     private final DonacionService donacionService;
 
     @PostMapping
+    @PreAuthorize("hasRole('DONANTE')")
     public ResponseEntity<DonacionDTO.Response> crear(@RequestBody DonacionDTO.Request request) {
         return ResponseEntity.ok(donacionService.crear(request));
     }

@@ -12,9 +12,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.EnumSet;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
+    private static final EnumSet<Usuario.Rol> ROLES_PUBLICOS = EnumSet.of(
+            Usuario.Rol.DONANTE,
+            Usuario.Rol.ORGANIZACION
+    );
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
@@ -39,9 +46,7 @@ public class AuthService {
             throw new RuntimeException("El email ya esta registrado");
         }
 
-        Usuario.Rol rol = request.getRol() != null
-                ? Usuario.Rol.valueOf(request.getRol().toUpperCase())
-                : Usuario.Rol.DONANTE;
+        Usuario.Rol rol = obtenerRolPermitido(request.getRol());
 
         Usuario usuario = Usuario.builder()
                 .email(request.getEmail())
@@ -55,5 +60,17 @@ public class AuthService {
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         String token = jwtUtil.generateToken(userDetails);
         return new AuthDTO.AuthResponse(token, usuario.getEmail(), usuario.getNombre(), usuario.getRol().name());
+    }
+
+    private Usuario.Rol obtenerRolPermitido(String rolSolicitado) {
+        Usuario.Rol rol = rolSolicitado == null || rolSolicitado.isBlank()
+                ? Usuario.Rol.DONANTE
+                : Usuario.Rol.valueOf(rolSolicitado.trim().toUpperCase());
+
+        if (!ROLES_PUBLICOS.contains(rol)) {
+            throw new RuntimeException("No se permite registrar usuarios con roles administrativos");
+        }
+
+        return rol;
     }
 }

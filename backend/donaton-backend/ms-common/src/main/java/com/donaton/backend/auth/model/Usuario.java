@@ -29,6 +29,6 @@ public class Usuario {
     private Rol rol;
 
     public enum Rol {
-        DONANTE, BENEFICIARIO, ADMIN, LOGISTICA
+        DONANTE, ORGANIZACION, ADMIN, LOGISTICA
     }
 }
