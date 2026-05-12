@@ -1,0 +1,59 @@
+package com.donaton.backend.necesidad.controller;
+
+import com.donaton.backend.necesidad.dto.NecesidadDTO;
+import com.donaton.backend.necesidad.service.NecesidadService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/necesidades")
+@RequiredArgsConstructor
+public class NecesidadController {
+
+    private final NecesidadService necesidadService;
+
+    @PostMapping
+    @PreAuthorize("hasRole('ORGANIZACION')")
+    public ResponseEntity<NecesidadDTO.Response> crear(@RequestBody NecesidadDTO.Request request) {
+        return ResponseEntity.ok(necesidadService.crear(request));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<NecesidadDTO.Response>> listarActivas() {
+        return ResponseEntity.ok(necesidadService.listarActivas());
+    }
+
+    @GetMapping("/mis-necesidades")
+    @PreAuthorize("hasRole('ORGANIZACION') or hasRole('ADMIN')")
+    public ResponseEntity<List<NecesidadDTO.Response>> listarMias() {
+        return ResponseEntity.ok(necesidadService.listarPorBeneficiario());
+    }
+
+    @GetMapping("/publicas")
+    public ResponseEntity<List<NecesidadDTO.Response>> listarPublicas() {
+        return ResponseEntity.ok(necesidadService.listarPublicas());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<NecesidadDTO.Response> obtenerPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(necesidadService.obtenerPorId(id));
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ORGANIZACION')")
+    public ResponseEntity<NecesidadDTO.Response> actualizar(
+            @PathVariable Long id, @RequestBody NecesidadDTO.Request request) {
+        return ResponseEntity.ok(necesidadService.actualizar(id, request));
+    }
+
+    @PatchMapping("/{id}/estado")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('ORGANIZACION')")
+    public ResponseEntity<NecesidadDTO.Response> actualizarEstado(
+            @PathVariable Long id, @RequestParam String estado) {
+        return ResponseEntity.ok(necesidadService.actualizarEstado(id, estado));
+    }
+}

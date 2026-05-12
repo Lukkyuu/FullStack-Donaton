@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ms-gateway
+  cloud:
+    gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - ${FRONTEND_ORIGIN:http://localhost:3000}
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            exposedHeaders:
+              - Authorization
+      routes:
+        - id: auth-service
+          uri: http://${AUTH_HOST:localhost}:8081
+          predicates:
+            - Path=/api/auth/**
+        - id: donacion-service
+          uri: http://${DONACION_HOST:localhost}:8082
+          predicates:
+            - Path=/api/donaciones/**
+        - id: logistica-service
+          uri: http://${LOGISTICA_HOST:localhost}:8083
+          predicates:
+            - Path=/api/logistica/**,/api/centros/**
+        - id: necesidad-service
+          uri: http://${NECESIDAD_HOST:localhost}:8084
+          predicates:
+            - Path=/api/necesidades/**
+        - id: usuarios-service
+          uri: http://${USUARIOS_HOST:localhost}:8085
+          predicates:
+            - Path=/api/usuarios/**
+        - id: matching-service
+          uri: http://${MATCHING_HOST:localhost}:8086
+          predicates:
+            - Path=/api/matching/**
+        - id: notificaciones-service
+          uri: http://${NOTIFICACIONES_HOST:localhost}:8087
+          predicates:
+            - Path=/api/notificaciones/**
