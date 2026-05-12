@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # URL del BFF (Nginx API Gateway del backend)
+        # Cambiar por la IP/dominio de la instancia AWS
+        VITE_BFF_URL: ${VITE_BFF_URL:-http://localhost:8080}
+    image: donaton-frontend:latest
+    container_name: donaton-frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
