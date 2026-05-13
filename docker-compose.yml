@@ -1,8 +1,8 @@
 services:
   frontend:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
       args:
         # URL del BFF (Nginx API Gateway del backend)
         # Cambiar por la IP/dominio de la instancia AWS
