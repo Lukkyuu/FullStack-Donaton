@@ -3,9 +3,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Instalar dependencias (npm ci es más rápido y determinístico que npm install)
+# Instalar dependencias
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # Copiar el resto del código fuente
 COPY . .
