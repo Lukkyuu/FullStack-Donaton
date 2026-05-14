@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApi } from '../../../shared/hooks/useApi.js';
 import { necesidadesService } from '../../../api/services/necesidadesService.js';
+import { useAuth } from '../../../auth/useAuth.js';
 import {
   LoadingSpinner, DegradedBanner, ErrorBox,
   EmptyState, StatusBadge, Modal,
@@ -9,13 +10,18 @@ import {
 const URGENCIAS = ['ALTA', 'MEDIA', 'BAJA'];
 const TIPOS     = ['ALIMENTO', 'ROPA', 'MEDICINA', 'DINERO', 'OTRO'];
 
-const INIT_FORM = {
-  descripcion: '', tipoNecesidad: '', urgencia: '',
-  cantidadRequerida: '', unidad: '', zona: '', organizacion: '',
-};
+
 
 export default function NecesidadesAdmin() {
+  const { user, role } = useAuth();
+  const isOrg = role === 'ORGANIZACION';
   const { data, loading, error, degraded, refetch } = useApi(() => necesidadesService.listar());
+
+  const INIT_FORM = {
+    descripcion: '', tipoNecesidad: '', urgencia: '',
+    cantidadRequerida: '', unidad: '', zona: '',
+    organizacion: isOrg ? (user?.nombre ?? '') : '',
+  };
 
   const [showModal, setShowModal] = useState(false);
   const [closeTarget, setCloseTarget] = useState(null);
@@ -69,7 +75,7 @@ export default function NecesidadesAdmin() {
           <h1 className="page-title">Gestión de necesidades</h1>
           <p className="page-subtitle">Necesidades humanitarias reportadas por organizaciones</p>
         </div>
-        <button className="btn btn-primary" onClick={() => { setShowModal(true); setSaveErr(''); }}>
+        <button className="btn btn-primary" onClick={() => { setShowModal(true); setSaveErr(''); setForm(INIT_FORM); }}>
           + Nueva necesidad
         </button>
       </div>
@@ -187,8 +193,17 @@ export default function NecesidadesAdmin() {
         </div>
         <div className="form-group">
           <label className="form-label">Organización</label>
-          <input name="organizacion" className="form-input" placeholder="Nombre de la org."
-            value={form.organizacion} onChange={handleChange} />
+          <input name="organizacion" className="form-input"
+            placeholder="Nombre de la org."
+            value={form.organizacion} onChange={handleChange}
+            readOnly={isOrg}
+            style={isOrg ? { background: 'var(--bg-page)', color: 'var(--text-muted)', cursor: 'not-allowed' } : {}}
+          />
+          {isOrg && (
+            <span style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, display: 'block' }}>
+              Se asignará automáticamente a tu organización.
+            </span>
+          )}
         </div>
         <div className="form-group">
           <label className="form-label">Zona</label>

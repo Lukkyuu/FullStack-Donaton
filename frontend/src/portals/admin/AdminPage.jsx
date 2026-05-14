@@ -1,38 +1,24 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth.js';
 
-// Nav items for ADMIN — full access
 const NAV_ADMIN = [
-  { to: '/admin',               label: 'Dashboard',             icon: '📊', end: true },
-  { to: '/admin/necesidades',   label: 'Necesidades',           icon: '📋' },
-  { to: '/admin/logistica',     label: 'Logística',             icon: '🚚' },
-  { to: '/admin/matching',      label: 'Matching',              icon: '🔗' },
-  { to: '/admin/organizaciones',label: 'Organizaciones',        icon: '🏢' },
-];
-
-// Nav items for ORGANIZACION — restricted (no Organizaciones management)
-const NAV_ORGANIZACION = [
-  { to: '/admin',               label: 'Mi panel',              icon: '🏠', end: true },
-  { to: '/admin/necesidades',   label: 'Mis necesidades',       icon: '📋' },
-  { to: '/admin/matching',      label: 'Matching recibido',     icon: '🔗' },
-  { to: '/admin/notificaciones',label: 'Notificaciones',        icon: '🔔' },
+  { to: '/admin',               label: 'Dashboard',      icon: '📊', end: true },
+  { to: '/admin/necesidades',   label: 'Necesidades',    icon: '📋' },
+  { to: '/admin/logistica',     label: 'Logística',      icon: '🚚' },
+  { to: '/admin/matching',      label: 'Matching',       icon: '🔗' },
+  { to: '/admin/organizaciones',label: 'Organizaciones', icon: '🏢' },
+  { to: '/admin/notificaciones',label: 'Notificaciones', icon: '🔔' },
 ];
 
 export default function AdminPage() {
   const { user, role, logout } = useAuth();
-
-  const isOrg = role === 'ORGANIZACION';
-  const navItems = isOrg ? NAV_ORGANIZACION : NAV_ADMIN;
-
-  const sidebarBg = isOrg ? '#0D2B42' : '#1A1040';
-  const accentBg  = isOrg ? '#185FA5' : '#3C3489';
 
   return (
     <div className="app-layout">
       {/* Sidebar */}
       <aside style={{
         width: 'var(--sidebar-w)', position: 'fixed', top: 0, left: 0,
-        height: '100vh', background: sidebarBg,
+        height: '100vh', background: '#1A1040',
         display: 'flex', flexDirection: 'column',
         borderRight: '1px solid rgba(255,255,255,0.06)',
         zIndex: 20,
@@ -42,24 +28,20 @@ export default function AdminPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{
               width: 36, height: 36, borderRadius: 10,
-              background: accentBg,
+              background: '#3C3489',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 18,
-            }}>
-              {isOrg ? '🏢' : '🛡'}
-            </div>
+            }}>🛡</div>
             <div>
               <div style={{ color: '#fff', fontWeight: 700, fontSize: 16, lineHeight: 1 }}>Donaton</div>
-              <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 11, marginTop: 2 }}>
-                {isOrg ? 'Panel Organización' : 'Panel Admin'}
-              </div>
+              <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 11, marginTop: 2 }}>Panel Admin</div>
             </div>
           </div>
         </div>
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
-          {navItems.map(({ to, label, icon, end }) => (
+          {NAV_ADMIN.map(({ to, label, icon, end }) => (
             <NavLink
               key={to} to={to} end={end}
               style={({ isActive }) => ({
@@ -77,12 +59,12 @@ export default function AdminPage() {
           ))}
         </nav>
 
-        {/* Role badge + user */}
+        {/* User footer */}
         <div style={{ padding: '16px 12px', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
             <div style={{
               width: 34, height: 34, borderRadius: '50%',
-              background: accentBg,
+              background: '#3C3489',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               color: '#fff', fontWeight: 600, fontSize: 13, flexShrink: 0,
             }}>
@@ -125,12 +107,10 @@ export default function AdminPage() {
           padding: '0 32px', justifyContent: 'space-between',
           position: 'sticky', top: 0, zIndex: 10,
         }}>
-          <div style={{ fontSize: 14, color: 'var(--text-muted)' }}>
-            {isOrg ? 'Portal de Organización' : 'Portal de Administración'}
-          </div>
+          <div style={{ fontSize: 14, color: 'var(--text-muted)' }}>Portal de Administración</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <NavLink
-              to={isOrg ? '/organizacion/notificaciones' : '/admin/notificaciones'}
+              to="/admin/notificaciones"
               style={{ position: 'relative', background: 'none', border: '1px solid var(--border-mid)', borderRadius: 8, width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, textDecoration: 'none', color: 'inherit' }}
             >
               🔔
