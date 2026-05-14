@@ -101,11 +101,13 @@ export default function AdminPage() {
             </div>
           </div>
           <button
+            type="button"
             onClick={logout}
             style={{
               width: '100%', padding: '8px', borderRadius: 8,
               background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)',
               color: 'rgba(255,255,255,0.7)', fontSize: 13, cursor: 'pointer',
+              transition: 'all 0.15s',
             }}
           >
             Cerrar sesión
@@ -128,7 +130,7 @@ export default function AdminPage() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <NavLink
-              to="/admin/notificaciones"
+              to={isOrg ? '/organizacion/notificaciones' : '/admin/notificaciones'}
               style={{ position: 'relative', background: 'none', border: '1px solid var(--border-mid)', borderRadius: 8, width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, textDecoration: 'none', color: 'inherit' }}
             >
               🔔
@@ -136,6 +138,18 @@ export default function AdminPage() {
             </NavLink>
             <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{user?.nombre ?? ''}</span>
             <span className={`tag-role-${role}`} style={{ fontSize: 11, padding: '2px 8px', borderRadius: 99, fontWeight: 600 }}>{role}</span>
+            <button
+              type="button"
+              onClick={logout}
+              style={{
+                padding: '6px 14px', borderRadius: 8,
+                background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)',
+                color: '#b91c1c', fontSize: 12, cursor: 'pointer', fontWeight: 500,
+                transition: 'all 0.15s',
+              }}
+            >
+              Salir
+            </button>
           </div>
         </header>
 
