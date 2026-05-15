@@ -11,7 +11,7 @@ spring:
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - ${FRONTEND_ORIGIN:http://98.88.36.163}
+              - ${FRONTEND_ORIGIN:http://54.167.22.94}
             allowedMethods:
               - GET
               - POST
@@ -25,30 +25,30 @@ spring:
               - Authorization
       routes:
         - id: auth-service
-          uri: http://${AUTH_HOST}:8081
+          uri: http://${AUTH_HOST:172.31.28.200}:8081
           predicates:
             - Path=/api/auth/**
         - id: donacion-service
-          uri: http://${DONACION_HOST}:8082
+          uri: http://${DONACION_HOST:172.31.28.200}:8082
           predicates:
             - Path=/api/donaciones/**
         - id: logistica-service
-          uri: http://${LOGISTICA_HOST}:8083
+          uri: http://${LOGISTICA_HOST:172.31.28.200}:8083
           predicates:
             - Path=/api/logistica/**,/api/centros/**
         - id: necesidad-service
-          uri: http://${NECESIDAD_HOST}:8084
+          uri: http://${NECESIDAD_HOST:172.31.28.200}:8084
           predicates:
             - Path=/api/necesidades/**
         - id: usuarios-service
-          uri: http://${USUARIOS_HOST:172.31.26.168}:8085
+          uri: http://${USUARIOS_HOST:172.31.28.200}:8085
           predicates:
             - Path=/api/usuarios/**
         - id: matching-service
-          uri: http://${MATCHING_HOST}:8086
+          uri: http://${MATCHING_HOST:172.31.28.200}:8086
           predicates:
             - Path=/api/matching/**
         - id: notificaciones-service
-          uri: http://${NOTIFICACIONES_HOST}:8087
+          uri: http://${NOTIFICACIONES_HOST:172.31.28.200}:8087
           predicates:
             - Path=/api/notificaciones/**

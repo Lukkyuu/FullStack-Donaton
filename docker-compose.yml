@@ -6,7 +6,7 @@ services:
       args:
         # URL del BFF (Nginx API Gateway del backend)
         # Cambiar por la IP/dominio de la instancia AWS
-        VITE_BFF_URL: ${VITE_BFF_URL:-http://98.81.122.77:8080}
+        VITE_BFF_URL: ${VITE_BFF_URL:-http://54.167.22.94:8080}
     image: donaton-frontend:latest
     container_name: donaton-frontend
     ports:
