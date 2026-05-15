@@ -8,42 +8,42 @@
 export const EP = {
   // ms-auth
   AUTH: {
-    LOGIN:   '/auth/login',
+    LOGIN:   '/api/auth/login',
     REGISTER:'/api/auth/register',
-    LOGOUT:  '/auth/logout',
-    REFRESH: '/auth/refresh',
-    ME:      '/auth/me',
+    LOGOUT:  '/api/auth/logout',
+    REFRESH: '/api/auth/refresh',
+    ME:      '/api/auth/me',
   },
 
   // ms-donaciones
   DONACIONES: {
-    LIST:         '/donaciones',
-    BY_ID:        (id)  => `/donaciones/${id}`,
-    CREATE:       '/donaciones',
-    UPDATE:       (id)  => `/donaciones/${id}`,
-    CANCEL:       (id)  => `/donaciones/${id}/cancelar`,
-    CAMPANAS:     '/donaciones/campanas',
-    CAMPANA_BY_ID:(id)  => `/donaciones/campanas/${id}`,
+    LIST:         '/api/donaciones',
+    BY_ID:        (id)  => `/api/donaciones/${id}`,
+    CREATE:       '/api/donaciones',
+    UPDATE:       (id)  => `/api/donaciones/${id}`,
+    CANCEL:       (id)  => `/api/donaciones/${id}/cancelar`,
+    CAMPANAS:     '/api/donaciones/campanas',
+    CAMPANA_BY_ID:(id)  => `/api/donaciones/campanas/${id}`,
   },
 
   // ms-necesidades
   NECESIDADES: {
-    LIST:     '/necesidades',
-    BY_ID:    (id) => `/necesidades/${id}`,
-    CREATE:   '/necesidades',
-    UPDATE:   (id) => `/necesidades/${id}`,
-    CLOSE:    (id) => `/necesidades/${id}/cerrar`,
-    PUBLICAS: '/necesidades/publicas',
+    LIST:     '/api/necesidades',
+    BY_ID:    (id) => `/api/necesidades/${id}`,
+    CREATE:   '/api/necesidades',
+    UPDATE:   (id) => `/api/necesidades/${id}`,
+    CLOSE:    (id) => `/api/necesidades/${id}/cerrar`,
+    PUBLICAS: '/api/necesidades/publicas',
   },
 
   // ms-logistica
   LOGISTICA: {
-    RECURSOS:        '/logistica/recursos',
-    RECURSO_BY_ID:   (id) => `/logistica/recursos/${id}`,
-    CREAR_RECURSO:   '/logistica/recursos',
-    DISTRIBUCIONES:  '/logistica/distribuciones',
-    CREAR_DIST:      '/logistica/distribuciones',
-    DIST_BY_ID:      (id) => `/logistica/distribuciones/${id}`,
+    RECURSOS:        '/api/logistica/recursos',
+    RECURSO_BY_ID:   (id) => `/api/logistica/recursos/${id}`,
+    CREAR_RECURSO:   '/api/logistica/recursos',
+    DISTRIBUCIONES:  '/api/logistica/distribuciones',
+    CREAR_DIST:      '/api/logistica/distribuciones',
+    DIST_BY_ID:      (id) => `/api/logistica/distribuciones/${id}`,
   },
 
   // ms-usuarios
@@ -58,13 +58,13 @@ export const EP = {
 
   // ms-matching (solo lectura para el frontend)
   MATCHING: {
-    RESULTADOS:  '/matching/resultados',
-    BY_ID:       (id) => `/matching/resultados/${id}`,
+    RESULTADOS:  '/api/matching/resultados',
+    BY_ID:       (id) => `/api/matching/resultados/${id}`,
   },
 
   // ms-notificaciones (solo preferencias desde el frontend)
   NOTIFICACIONES: {
-    PREFS:        '/notificaciones/preferencias',
-    UPDATE_PREFS: '/notificaciones/preferencias',
+    PREFS:        '/api/notificaciones/preferencias',
+    UPDATE_PREFS: '/api/notificaciones/preferencias',
   },
 };
