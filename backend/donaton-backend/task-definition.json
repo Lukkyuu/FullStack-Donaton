@@ -38,7 +38,7 @@
         }
       ],
       "environment": [
-        {"name": "DB_URL", "value": "jdbc:postgresql://127.0.0.1:5432/donaton"},
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/donaton"},
         {"name": "DB_USERNAME", "value": "root"},
         {"name": "DB_PASSWORD", "value": "password"},
         {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
@@ -57,31 +57,7 @@
         }
       }
     },
-    {
-      "name": "postgres-container",
-      "image": "postgres:15",
-      "portMappings": [
-        {
-          "containerPort": 5432,
-          "hostPort": 5432,
-          "protocol": "tcp"
-        }
-      ],
-      "environment": [
-        {"name": "POSTGRES_USER", "value": "root"},
-        {"name": "POSTGRES_PASSWORD", "value": "password"},
-        {"name": "POSTGRES_DB", "value": "donaton"}
-      ],
-      "essential": true,
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/donaton-backend",
-          "awslogs-region": "us-west-2",
-          "awslogs-stream-prefix": "ecs"
-        }
-      }
-    },
+
     {
       "name": "rabbitmq-container",
       "image": "rabbitmq:3-management",
