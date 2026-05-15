@@ -2,24 +2,6 @@ import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth.js';
 
-// Cuentas de prueba (solo para desarrollo cuando backend no está disponible)
-const MOCK_USERS = {
-  'admin@donaton.cl':   { role: 'ADMIN',        nombre: 'Diego Admin' },
-  'org@donaton.cl':     { role: 'ORGANIZACION',  nombre: 'Cruz Roja Biobío' },
-  'donante@donaton.cl': { role: 'DONANTE',       nombre: 'Diego Otárola' },
-};
-const MOCK_PASSWORD = '12345678';
-
-function makeFakeToken(user, email) {
-  const payload = btoa(JSON.stringify({
-    sub: String(Math.floor(Math.random() * 1000)),
-    role: user.role,
-    nombre: user.nombre,
-    email,
-    exp: Math.floor(Date.now() / 1000) + 900,
-  }));
-  return `eyJhbGciOiJIUzI1NiJ9.${payload}.mock_signature`;
-}
 
 function getRoleRedirect(role) {
   if (role === 'ADMIN')        return '/admin';
@@ -44,24 +26,11 @@ export default function Login() {
     setError('');
     setLoading(true);
 
-    await new Promise((r) => setTimeout(r, 500));
-
-    const mockUser = MOCK_USERS[form.email];
-
-    if (!mockUser || form.password !== MOCK_PASSWORD) {
-      setError('Credenciales inválidas. Verifica tu correo y contraseña.');
-      setLoading(false);
-      return;
-    }
-
     try {
       const role = await login(form.email, form.password);
       navigate(getRoleRedirect(role), { replace: true });
-    } catch {
-      // Backend no disponible — aplicar token mock directamente
-      const fakeToken = makeFakeToken(mockUser, form.email);
-      applyToken(fakeToken);
-      navigate(getRoleRedirect(mockUser.role), { replace: true });
+    } catch (err) {
+      setError('Credenciales inválidas. Verifica tu correo y contraseña.');
     } finally {
       setLoading(false);
     }
