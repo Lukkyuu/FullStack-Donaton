@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BFF_URL = import.meta.env.VITE_BFF_URL ?? 'http://35.87.2.178:8080';
+const BFF_URL = import.meta.env.VITE_BFF_URL ?? 'http://donaton-alb-1060623249.us-west-2.elb.amazonaws.com';
 
 if (!BFF_URL) {
   throw new Error('VITE_BFF_URL no está configurada. Define la URL real del gateway para el entorno actual.');

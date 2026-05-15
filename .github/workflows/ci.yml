@@ -63,7 +63,7 @@ jobs:
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: donaton-backend-service
+        service: donaton-backend-service-v2
         cluster: donaton-cluster
         wait-for-service-stability: true
   build-frontend:
