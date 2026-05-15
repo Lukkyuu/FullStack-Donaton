@@ -9,6 +9,7 @@ export const EP = {
   // ms-auth
   AUTH: {
     LOGIN:   '/auth/login',
+    REGISTER:'/api/auth/register',
     LOGOUT:  '/auth/logout',
     REFRESH: '/auth/refresh',
     ME:      '/auth/me',

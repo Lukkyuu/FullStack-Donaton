@@ -38,7 +38,7 @@ export default function Register() {
         rol:      tipo,
         ...(tipo === 'ORGANIZACION' && { organizacion: form.organizacion }),
       };
-      await apiClient.post(EP.USUARIOS.CREATE, payload);
+      await apiClient.post(EP.AUTH.REGISTER, payload);
       navigate('/login', { state: { registered: true } });
     } catch (err) {
       setError(err?.response?.data?.message ?? 'No se pudo completar el registro. Intenta de nuevo.');
