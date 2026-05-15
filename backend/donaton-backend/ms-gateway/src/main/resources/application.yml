@@ -40,10 +40,10 @@ spring:
           uri: http://${NECESIDAD_HOST:172.31.28.200}:8084
           predicates:
             - Path=/api/necesidades/**
-        - id: usuarios-service
-          uri: http://${USUARIOS_HOST:172.31.28.200}:8085
+        - id: ms-usuarios
+          uri: http://172.31.28.200:8085
           predicates:
-            - Path=/api/usuarios/**
+            - Path=/usuarios/**
         - id: matching-service
           uri: http://${MATCHING_HOST:172.31.28.200}:8086
           predicates:
