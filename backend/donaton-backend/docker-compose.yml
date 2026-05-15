@@ -110,6 +110,8 @@ services:
       - DONACION_HOST=ms-donacion
       - LOGISTICA_HOST=ms-logistica
       - NECESIDAD_HOST=ms-necesidad
+      - FRONTEND_ORIGIN=http://98.88.36.163
+      - USUARIOS_HOST=172.31.26.168
     depends_on:
       - ms-auth
       - ms-donacion

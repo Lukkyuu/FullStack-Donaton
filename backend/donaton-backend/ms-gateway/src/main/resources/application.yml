@@ -11,7 +11,7 @@ spring:
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - ${FRONTEND_ORIGIN}
+              - ${FRONTEND_ORIGIN:http://98.88.36.163}
             allowedMethods:
               - GET
               - POST
@@ -41,7 +41,7 @@ spring:
           predicates:
             - Path=/api/necesidades/**
         - id: usuarios-service
-          uri: http://${USUARIOS_HOST}:8085
+          uri: http://${USUARIOS_HOST:172.31.26.168}:8085
           predicates:
             - Path=/api/usuarios/**
         - id: matching-service

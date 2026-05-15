@@ -12,12 +12,14 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
+    private static final String DEFAULT_FRONTEND_ORIGINS = "http://98.88.36.163";
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-    String frontendOrigins = System.getenv("FRONTEND_ORIGINS");
+        String frontendOrigins = System.getenv().getOrDefault("FRONTEND_ORIGINS", DEFAULT_FRONTEND_ORIGINS);
     config.setAllowedOrigins(Arrays.stream(
-            frontendOrigins == null ? new String[0] : frontendOrigins.split(","))
+                        frontendOrigins.split(","))
         .map(String::trim)
         .filter(origin -> !origin.isBlank())
         .toList());
