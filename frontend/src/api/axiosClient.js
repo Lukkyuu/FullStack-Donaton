@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const BFF_URL = import.meta.env.VITE_BFF_URL ?? 'https://api.donaton.cl';
+// Cambiamos la URL base para que apunte a la IP Pública de tu Gateway en AWS
+const BFF_URL = import.meta.env.VITE_BFF_URL ?? 'http://54.167.22.94:8080';
 
 const apiClient = axios.create({
   baseURL: BFF_URL,
-  timeout: 12_000,
+  timeout: 12000,
   headers: { 'Content-Type': 'application/json' },
   // Requerido: envía la cookie HttpOnly del refresh token automáticamente
   withCredentials: true,
