@@ -1,0 +1,33 @@
+{
+  "family": "donaton-backend-task",
+  "networkMode": "awsvpc",
+  "executionRoleArn": "arn:aws:iam::532149873618:role/LabRole",
+  "taskRoleArn": "arn:aws:iam::532149873618:role/LabRole",
+  "containerDefinitions": [
+    {
+      "name": "donaton-backend-container",
+      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-backend:latest",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/donaton-backend",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512"
+}
