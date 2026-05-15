@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-// Cambiamos la URL base para que apunte a la IP Pública de tu Gateway en AWS
-const BFF_URL = import.meta.env.VITE_BFF_URL ?? 'http://54.167.22.94:8080';
+const BFF_URL = import.meta.env.VITE_BFF_URL;
+
+if (!BFF_URL) {
+  throw new Error('VITE_BFF_URL no está configurada. Define la URL real del gateway para el entorno actual.');
+}
 
 const apiClient = axios.create({
   baseURL: BFF_URL,

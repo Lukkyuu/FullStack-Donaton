@@ -11,8 +11,8 @@ RUN npm install
 COPY . .
 
 # VITE_BFF_URL se inyecta en build-time como build-arg
-# Ejemplo: docker build --build-arg VITE_BFF_URL=http://tu-ip-aws:8080 .
-ARG VITE_BFF_URL=http://localhost:8080
+# Ejemplo: docker build --build-arg VITE_BFF_URL=https://api.donaton.cl .
+ARG VITE_BFF_URL
 ENV VITE_BFF_URL=$VITE_BFF_URL
 
 RUN npm run build
