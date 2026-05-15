@@ -38,9 +38,9 @@
         }
       ],
       "environment": [
-        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/donaton"},
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
         {"name": "DB_USERNAME", "value": "root"},
-        {"name": "DB_PASSWORD", "value": "password"},
+        {"name": "DB_PASSWORD", "value": "password123"},
         {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
         {"name": "RABBITMQ_PORT", "value": "5672"},
         {"name": "RABBITMQ_USERNAME", "value": "guest"},
