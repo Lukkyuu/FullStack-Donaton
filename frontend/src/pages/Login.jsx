@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth.js';
 
+// Cuentas de prueba (solo para desarrollo cuando backend no está disponible)
 const MOCK_USERS = {
-  'admin@donaton.cl': { role: 'ADMIN', nombre: 'Diego Admin' },
-  'org@donaton.cl': { role: 'ORGANIZACION', nombre: 'Cruz Roja Biobío' },
-  'donante@donaton.cl': { role: 'DONANTE', nombre: 'Diego Otárola' },
-  'anonimo@donaton.cl': { role: 'ANONIMO', nombre: 'Usuario Anónimo' },
+  'admin@donaton.cl':   { role: 'ADMIN',        nombre: 'Diego Admin' },
+  'org@donaton.cl':     { role: 'ORGANIZACION',  nombre: 'Cruz Roja Biobío' },
+  'donante@donaton.cl': { role: 'DONANTE',       nombre: 'Diego Otárola' },
 };
 const MOCK_PASSWORD = '12345678';
 
@@ -49,7 +49,7 @@ export default function Login() {
     const mockUser = MOCK_USERS[form.email];
 
     if (!mockUser || form.password !== MOCK_PASSWORD) {
-      setError('Credenciales inválidas. Usa una de las cuentas de prueba.');
+      setError('Credenciales inválidas. Verifica tu correo y contraseña.');
       setLoading(false);
       return;
     }
@@ -67,7 +67,7 @@ export default function Login() {
     }
   };
 
-  const fillAndSubmit = (email) => setForm({ email, password: MOCK_PASSWORD });
+
 
   return (
     <div style={{
@@ -107,37 +107,6 @@ export default function Login() {
                 }}>✓</span>
                 <span style={{ fontSize: 14, opacity: 0.9 }}>{text}</span>
               </div>
-            ))}
-          </div>
-
-          {/* Cuentas de prueba */}
-          <div style={{
-            marginTop: 40, padding: '16px 20px',
-            background: 'rgba(255,255,255,0.1)', borderRadius: 12,
-          }}>
-            <div style={{
-              fontSize: 12, fontWeight: 600, opacity: 0.7,
-              marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.06em',
-            }}>
-              Cuentas de prueba — contraseña: 12345678
-            </div>
-            {Object.entries(MOCK_USERS).map(([email, u]) => (
-              <button
-                key={email}
-                onClick={() => fillAndSubmit(email)}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  width: '100%', padding: '8px 10px', marginBottom: 6,
-                  background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)',
-                  borderRadius: 8, color: '#fff', fontSize: 13, cursor: 'pointer',
-                }}
-              >
-                <span>{email}</span>
-                <span style={{
-                  fontSize: 11, fontWeight: 600, padding: '2px 8px',
-                  borderRadius: 99, background: 'rgba(255,255,255,0.2)',
-                }}>{u.role}</span>
-              </button>
             ))}
           </div>
         </div>

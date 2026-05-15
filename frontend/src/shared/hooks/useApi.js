@@ -25,7 +25,7 @@ export function useApi(serviceFn, deps = [], immediate = true) {
       setDegraded(!!resData?._meta?.degraded);
       return resData;
     } catch (err) {
-      setDegraded(!!err._degraded);
+      setDegraded(!!(err?._degraded));
       setError(err?.response?.data?.message ?? err?.message ?? 'Error inesperado');
       return null;
     } finally {

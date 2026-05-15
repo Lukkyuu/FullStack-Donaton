@@ -28,22 +28,22 @@ import Organizaciones          from '../portals/admin/pages/Organizaciones.jsx';
 import NecesidadesAdmin        from '../portals/admin/pages/NecesidadesAdmin.jsx';
 import PreferenciasNotifAdmin  from '../portals/admin/pages/PreferenciasNotificacionesAdmin.jsx';
 
-// Portal Organización
-import DashboardOrganizacion   from '../portals/admin/pages/DashboardOrganizacion.jsx';
+// Portal Organización (ORGANIZACION) — portal propio con rutas /organizacion/...
+import OrganizacionPage        from '../portals/organizacion/OrganizacionPage.jsx';
+import DashboardOrganizacion   from '../portals/organizacion/pages/DashboardOrganizacion.jsx';
 
 export const ROLES = {
   ADMIN:        'ADMIN',
   ORGANIZACION: 'ORGANIZACION',
   DONANTE:      'DONANTE',
-  ANONIMO:      'ANONIMO',
 };
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas raíz: redirige según autenticación — el componente Landing maneja ANONIMO */}
-        <Route path="/" element={<Navigate to="/donante" replace />} />
+        {/* Ruta raíz: redirige al landing */}
+        <Route path="/" element={<Navigate to="/bienvenida" replace />} />
 
         {/* Rutas públicas */}
         <Route path="/login"        element={<Login />} />
@@ -104,7 +104,7 @@ export default function AppRouter() {
             />
           }
         >
-          <Route element={<AdminPage />}>
+          <Route element={<OrganizacionPage />}>
             <Route index                    element={<DashboardOrganizacion />} />
             <Route path="necesidades"       element={<NecesidadesAdmin />} />
             <Route path="matching"          element={<MatchingPanel />} />
