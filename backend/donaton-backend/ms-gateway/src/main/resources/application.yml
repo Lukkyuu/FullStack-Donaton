@@ -8,7 +8,19 @@ spring:
     gateway:
       server:
         webflux:
-
+          globalcors:
+            add-to-simple-url-handler-mapping: true
+            cors-configurations:
+              '[/**]':
+                allowedOriginPatterns:
+                  - "*"
+                allowedMethods:
+                  - "*"
+                allowedHeaders:
+                  - "*"
+                allowCredentials: true
+                exposedHeaders:
+                  - Authorization
           routes:
             - id: auth-service
               uri: http://${AUTH_HOST:172.31.28.200}:8081
