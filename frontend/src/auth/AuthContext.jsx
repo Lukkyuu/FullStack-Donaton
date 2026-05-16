@@ -41,15 +41,15 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     apiClient.post(EP.AUTH.REFRESH)
-      .then(({ data }) => applyToken(data.accessToken))
+      .then(({ data }) => applyToken(data.token))
       .catch(() => applyToken(null))
       .finally(() => setIsLoading(false));
   }, [applyToken]);
 
   const login = useCallback(async (email, password) => {
     const { data } = await apiClient.post(EP.AUTH.LOGIN, { email, password });
-    applyToken(data.accessToken);
-    return data.role;
+    applyToken(data.token);
+    return data.rol;
   }, [applyToken]);
 
   return (
