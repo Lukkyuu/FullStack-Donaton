@@ -125,7 +125,7 @@ export default function NecesidadesPublicas() {
                 <button
                   className="btn btn-primary"
                   style={{ marginTop: 'auto', justifyContent: 'center', width: '100%' }}
-                  onClick={() => navigate('/donante/nueva-donacion', { state: { necesidadId: n.id } })}
+                  onClick={() => navigate('/donante/nueva-donacion', { state: { necesidad: n } })}
                 >
                   Donar para esta necesidad
                 </button>

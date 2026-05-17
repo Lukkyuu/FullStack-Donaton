@@ -26,7 +26,11 @@ public class NecesidadService {
         Necesidad necesidad = Necesidad.builder()
                 .beneficiario(beneficiario)
                 .descripcion(request.getDescripcion())
-                .categoria(request.getCategoria())
+                .categoria(request.getCategoria() != null ? request.getCategoria() : request.getTipoNecesidad())
+                .tipoNecesidad(request.getTipoNecesidad())
+                .urgencia(request.getUrgencia())
+                .unidad(request.getUnidad())
+                .zona(request.getZona())
                 .cantidadRequerida(request.getCantidadRequerida())
                 .estado(Necesidad.EstadoNecesidad.ACTIVA)
                 .build();
@@ -66,7 +70,11 @@ public class NecesidadService {
         }
 
         necesidad.setDescripcion(request.getDescripcion());
-        necesidad.setCategoria(request.getCategoria());
+        necesidad.setCategoria(request.getCategoria() != null ? request.getCategoria() : request.getTipoNecesidad());
+        necesidad.setTipoNecesidad(request.getTipoNecesidad());
+        necesidad.setUrgencia(request.getUrgencia());
+        necesidad.setUnidad(request.getUnidad());
+        necesidad.setZona(request.getZona());
         necesidad.setCantidadRequerida(request.getCantidadRequerida());
 
         return toResponse(necesidadRepository.save(necesidad));
@@ -84,6 +92,10 @@ public class NecesidadService {
                 .beneficiarioNombre(n.getBeneficiario().getNombre())
                 .descripcion(n.getDescripcion())
                 .categoria(n.getCategoria())
+                .tipoNecesidad(n.getTipoNecesidad() != null ? n.getTipoNecesidad() : n.getCategoria())
+                .urgencia(n.getUrgencia())
+                .unidad(n.getUnidad())
+                .zona(n.getZona())
                 .cantidadRequerida(n.getCantidadRequerida())
                 .estado(n.getEstado() != null ? n.getEstado().name() : null)
                 .fechaCreacion(n.getFechaCreacion())
