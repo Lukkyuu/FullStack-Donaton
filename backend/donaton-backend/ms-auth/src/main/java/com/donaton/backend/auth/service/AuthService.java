@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.EnumSet;
 
@@ -28,6 +29,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsServiceImpl userDetailsService;
+    private final JdbcTemplate jdbcTemplate;
 
     public AuthDTO.AuthResponse login(AuthDTO.LoginRequest request) {
         authenticationManager.authenticate(
@@ -54,6 +56,30 @@ public class AuthService {
                 .build();
 
         usuario = usuarioRepository.save(usuario);
+
+        // Simulación de envío de correo de bienvenida
+        System.out.println("\n==================================================");
+        System.out.println("📧 SIMULANDO ENVÍO DE CORREO DE BIENVENIDA:");
+        System.out.println("Para: " + usuario.getEmail());
+        System.out.println("Asunto: ¡Bienvenido a Donaton! Cuenta creada con éxito");
+        System.out.println("Contenido:\nHola " + usuario.getNombre() + ",\nTu cuenta ha sido creada con éxito. Bienvenido a Donaton, tu plataforma de gestión humanitaria.");
+        System.out.println("==================================================\n");
+
+        // Insertar registro en notificaciones
+        try {
+            jdbcTemplate.update(
+                "INSERT INTO notificaciones (usuario_id, tipo, titulo, mensaje, leida, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?)",
+                usuario.getId(),
+                "BIENVENIDA",
+                "¡Bienvenido a Donaton!",
+                "Hola " + usuario.getNombre() + ", tu cuenta ha sido creada con éxito. ¡Gracias por unirte a nosotros!",
+                false,
+                java.time.LocalDateTime.now()
+            );
+        } catch (Exception e) {
+            System.err.println("No se pudo insertar la notificación de bienvenida: " + e.getMessage());
+        }
+
         String token = jwtUtil.generateToken(usuario);
         return new AuthDTO.AuthResponse(token, usuario.getEmail(), usuario.getNombre(), usuario.getRol().name());
     }

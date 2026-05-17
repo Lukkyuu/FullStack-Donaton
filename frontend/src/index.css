@@ -264,3 +264,24 @@ tbody tr:hover { background: var(--bg-page); }
   width: 7px; height: 7px; border-radius: 50%;
   background: #D85A30; border: 1.5px solid var(--bg-card);
 }
+
+/* ── Monitoreo Led Pulse Animation ── */
+@keyframes pulse-green {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.pulse-green-led {
+  animation: pulse-green 1.8s infinite;
+}
+
+@keyframes pulse-amber {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 159, 39, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(239, 159, 39, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 159, 39, 0); }
+}
+
+.pulse-amber-led {
+  animation: pulse-amber 1.8s infinite;
+}

@@ -27,6 +27,7 @@ import DetalleMatching         from '../portals/admin/pages/DetalleMatching.jsx'
 import Organizaciones          from '../portals/admin/pages/Organizaciones.jsx';
 import NecesidadesAdmin        from '../portals/admin/pages/NecesidadesAdmin.jsx';
 import PreferenciasNotifAdmin  from '../portals/admin/pages/PreferenciasNotificacionesAdmin.jsx';
+import DonacionesAdmin         from '../portals/admin/pages/DonacionesAdmin.jsx';
 
 // Portal Organización (ORGANIZACION) — portal propio con rutas /organizacion/...
 import OrganizacionPage        from '../portals/organizacion/OrganizacionPage.jsx';
@@ -85,6 +86,7 @@ export default function AppRouter() {
         >
           <Route element={<AdminPage />}>
             <Route index                    element={<AdminHome />} />
+            <Route path="donaciones"        element={<DonacionesAdmin />} />
             <Route path="logistica"         element={<GestionLogistica />} />
             <Route path="matching"          element={<MatchingPanel />} />
             <Route path="matching/:id"      element={<DetalleMatching />} />

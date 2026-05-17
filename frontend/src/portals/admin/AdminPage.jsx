@@ -3,6 +3,7 @@ import { useAuth } from '../../auth/useAuth.js';
 
 const NAV_ADMIN = [
   { to: '/admin',               label: 'Dashboard',      icon: '📊', end: true },
+  { to: '/admin/donaciones',    label: 'Donaciones',     icon: '💝' },
   { to: '/admin/necesidades',   label: 'Necesidades',    icon: '📋' },
   { to: '/admin/logistica',     label: 'Logística',      icon: '🚚' },
   { to: '/admin/matching',      label: 'Matching',       icon: '🔗' },
