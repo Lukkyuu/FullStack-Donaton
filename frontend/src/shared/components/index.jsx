@@ -9,15 +9,22 @@ export function LoadingSpinner({ text = 'Cargando...' }) {
 }
 
 /* ── DegradedBanner ── */
-export function DegradedBanner({ show }) {
+export function DegradedBanner({ show, prominent = false }) {
   if (!show) return null;
+  if (prominent) {
+    return (
+      <div className="degraded-banner-prominent">
+        <div className="degraded-indicator" />
+        <span>
+          <strong>Modo degradado:</strong> Mostrando datos en caché. El sistema se está recuperando automáticamente.
+        </span>
+      </div>
+    );
+  }
   return (
     <div className="degraded-banner">
       <span style={{ fontSize: 16 }}>⚠</span>
-      <span>
-        Mostrando datos cacheados — algunos valores pueden no estar al día.
-        El sistema se está recuperando automáticamente.
-      </span>
+      <span>Mostrando datos cacheados — algunos valores pueden no estar al día. El sistema se está recuperando automáticamente.</span>
     </div>
   );
 }
@@ -63,6 +70,32 @@ export function Modal({ open, title, onClose, children, footer }) {
         </div>
         <div className="modal-body">{children}</div>
         {footer && <div className="modal-footer">{footer}</div>}
+      </div>
+    </div>
+  );
+}
+
+/* ── ConfirmModal ── */
+export function ConfirmModal({ open, icon = '⚠️', title, description, confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', onConfirm, onCancel, danger = false }) {
+  if (!open) return null;
+  return (
+    <div className="modal-backdrop" onClick={onCancel}>
+      <div className="confirm-modal" onClick={e => e.stopPropagation()}>
+        <div className="confirm-modal-icon">{icon}</div>
+        <div className="confirm-modal-title">{title}</div>
+        {description && <div className="confirm-modal-desc">{description}</div>}
+        <div className="confirm-modal-actions">
+          <button
+            className={`btn ${danger ? 'btn-danger' : 'btn-primary'}`}
+            style={{ padding: '10px 24px', fontSize: 14 }}
+            onClick={onConfirm}
+          >
+            {confirmLabel}
+          </button>
+          <button className="btn btn-secondary" style={{ padding: '10px 24px', fontSize: 14 }} onClick={onCancel}>
+            {cancelLabel}
+          </button>
+        </div>
       </div>
     </div>
   );

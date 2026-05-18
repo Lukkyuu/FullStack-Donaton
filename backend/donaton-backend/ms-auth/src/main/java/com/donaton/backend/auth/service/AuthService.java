@@ -12,8 +12,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import com.donaton.backend.auth.model.PasswordResetToken;
+import com.donaton.backend.auth.repository.PasswordResetTokenRepository;
 
 import java.util.EnumSet;
+import java.util.Optional;
+import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +36,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsServiceImpl userDetailsService;
     private final JdbcTemplate jdbcTemplate;
+    private final PasswordResetTokenRepository tokenRepository;
 
     public AuthDTO.AuthResponse login(AuthDTO.LoginRequest request) {
         authenticationManager.authenticate(
@@ -100,5 +107,48 @@ public class AuthService {
         Usuario usuario = usuarioRepository.findByEmail(currentEmail).orElseThrow();
         String newToken = jwtUtil.generateToken(usuario);
         return new AuthDTO.AuthResponse(newToken, usuario.getEmail(), usuario.getNombre(), usuario.getRol().name());
+    }
+
+    @Transactional
+    public void recuperarPassword(String email) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        if (usuarioOpt.isEmpty()) {
+            return; // Prevención de enumeración de usuarios
+        }
+        Usuario usuario = usuarioOpt.get();
+
+        // Borrar tokens anteriores
+        tokenRepository.deleteByUsuarioId(usuario.getId());
+
+        // Crear nuevo token
+        String tokenStr = UUID.randomUUID().toString();
+        PasswordResetToken token = PasswordResetToken.builder()
+                .token(tokenStr)
+                .usuario(usuario)
+                .expiryDate(LocalDateTime.now().plusMinutes(30))
+                .build();
+        tokenRepository.save(token);
+
+        System.out.println("\n==================================================");
+        System.out.println("📧 SIMULANDO ENVÍO DE RECUPERACIÓN DE CONTRASEÑA:");
+        System.out.println("Para: " + usuario.getEmail());
+        System.out.println("Enlace: http://localhost:5173/reset-password?token=" + tokenStr);
+        System.out.println("==================================================\n");
+    }
+
+    @Transactional
+    public void resetPassword(String tokenStr, String newPassword) {
+        PasswordResetToken token = tokenRepository.findByToken(tokenStr)
+                .orElseThrow(() -> new RuntimeException("Token inválido"));
+
+        if (token.isExpired()) {
+            tokenRepository.delete(token);
+            throw new RuntimeException("El token ha expirado");
+        }
+
+        Usuario usuario = token.getUsuario();
+        usuario.setPassword(passwordEncoder.encode(newPassword));
+        usuarioRepository.save(usuario);
+        tokenRepository.delete(token);
     }
 }

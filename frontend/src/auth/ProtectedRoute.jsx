@@ -1,6 +1,6 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { useAuth } from './useAuth.js';
-import LoadingSpinner from '../shared/components/LoadingSpinner.jsx';
+import { LoadingSpinner } from '../shared/components/index.jsx';
 
 /**
  * ProtectedRoute

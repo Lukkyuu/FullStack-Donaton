@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApi } from '../shared/hooks/useApi.js';
 import { necesidadesService } from '../api/services/necesidadesService.js';
 import { StatusBadge } from '../shared/components/index.jsx';
+import logoUrl from '../assets/logo.png';
 
 const FEATURES = [
   { icon: '🤝', title: 'Donaciones con propósito', desc: 'Conecta tu donación directamente con quienes más lo necesitan.' },
@@ -37,12 +38,7 @@ export default function Landing() {
         padding: '0 40px', height: 64,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: 10,
-            background: 'var(--brand-primary)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 18,
-          }}>🤝</div>
+          <img src={logoUrl} alt="Donaton" style={{ width: 40, height: 40, objectFit: 'contain' }} />
           <span style={{ fontWeight: 700, fontSize: 17, color: 'var(--text-primary)' }}>Donaton</span>
         </div>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
@@ -119,23 +115,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* STATS */}
-      <section style={{
-        background: '#fff', borderBottom: '1px solid var(--border)',
-        padding: '36px 40px',
-      }}>
-        <div style={{
-          maxWidth: 900, margin: '0 auto',
-          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16,
-        }}>
-          {STATS.map((s) => (
-            <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 32, fontWeight: 800, color: 'var(--brand-primary)', lineHeight: 1 }}>{s.value}</div>
-              <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 6 }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+
 
       {/* FEATURES */}
       <section style={{ padding: '72px 40px', maxWidth: 960, margin: '0 auto' }}>
@@ -251,7 +231,7 @@ export default function Landing() {
             </button>
             <button
               className="btn"
-              style={{ border: '1.5px solid rgba(255,255,255,0.4)', color: '#fff', padding: '13px 28px', fontSize: 15 }}
+              style={{ background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.7)', color: '#fff', padding: '13px 28px', fontSize: 15, backdropFilter: 'blur(4px)' }}
               onClick={() => navigate('/login')}
             >
               Iniciar sesión

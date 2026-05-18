@@ -59,7 +59,7 @@ apiClient.interceptors.response.use(
     const original = error.config;
 
     /* 401 → intento silencioso de renovar el Access Token con refresh cookie */
-    if (error.response?.status === 401 && !original._retry) {
+    if (error.response?.status === 401 && !original._retry && !original.url.includes('/auth/login')) {
       original._retry = true;
 
       if (isRefreshing) {

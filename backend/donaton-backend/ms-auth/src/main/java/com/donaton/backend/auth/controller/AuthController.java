@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -39,6 +40,21 @@ public class AuthController {
     public ResponseEntity<AuthDTO.AuthResponse> me() {
         String email = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(authService.refreshToken(email));
+    }
+
+    @PostMapping("/recuperar-password")
+    public ResponseEntity<?> recuperarPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        authService.recuperarPassword(email);
+        return ResponseEntity.ok(Map.of("message", "Si el correo existe, se ha enviado un enlace de recuperación."));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
+        String newPassword = request.get("newPassword");
+        authService.resetPassword(token, newPassword);
+        return ResponseEntity.ok(Map.of("message", "Contraseña restablecida exitosamente."));
     }
 
     public static class LogoutResponse {
