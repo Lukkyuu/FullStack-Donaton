@@ -15,7 +15,13 @@
         }
       ],
       "environment": [
-        {"name": "AUTH_HOST", "value": "127.0.0.1"}
+        {"name": "AUTH_HOST", "value": "127.0.0.1"},
+        {"name": "DONACION_HOST", "value": "172.31.5.156"},
+        {"name": "LOGISTICA_HOST", "value": "172.31.5.156"},
+        {"name": "NECESIDAD_HOST", "value": "172.31.5.156"},
+        {"name": "USUARIOS_HOST", "value": "172.31.5.156"},
+        {"name": "MATCHING_HOST", "value": "172.31.5.156"},
+        {"name": "NOTIFICACIONES_HOST", "value": "172.31.5.156"}
       ],
       "essential": true,
       "logConfiguration": {
