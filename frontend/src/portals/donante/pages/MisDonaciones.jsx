@@ -18,7 +18,7 @@ const TIPO_LABELS = {
 export default function MisDonaciones() {
   const navigate = useNavigate();
   const { data, loading, error, degraded, refetch } = useApi(
-    () => donacionesService.listar()
+    () => donacionesService.listarMias()
   );
   const [cancelTarget, setCancelTarget] = useState(null);
   const [canceling, setCanceling]       = useState(false);

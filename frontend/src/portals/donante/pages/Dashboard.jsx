@@ -10,7 +10,7 @@ export default function DonanteHome() {
   const navigate  = useNavigate();
 
   const { data: donaciones, loading: loadDon, error: errDon, degraded: degDon } =
-    useApi(() => donacionesService.listar({ limit: 5 }));
+    useApi(() => donacionesService.listarMias({ limit: 5 }));
 
   const { data: necesidades, loading: loadNec, error: errNec, degraded: degNec } =
     useApi(() => necesidadesService.publicas({ limit: 4 }));
