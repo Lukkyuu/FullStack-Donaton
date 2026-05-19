@@ -37,7 +37,11 @@ public class DonacionService {
                 .donante(donante)
                 .centroAcopio(centro)
                 .descripcion(request.getDescripcion())
-                .categoria(request.getCategoria())
+                .categoria(request.getCategoria() != null ? request.getCategoria() : request.getTipoDonacion())
+                .tipoDonacion(request.getTipoDonacion() != null ? request.getTipoDonacion() : request.getCategoria())
+                .unidad(request.getUnidad())
+                .zona(request.getZona())
+                .necesidadId(request.getNecesidadId())
                 .cantidad(request.getCantidad())
                 .estado(Donacion.EstadoDonacion.PENDIENTE)
                 .build();
@@ -79,7 +83,11 @@ public class DonacionService {
         }
 
         donacion.setDescripcion(request.getDescripcion());
-        donacion.setCategoria(request.getCategoria());
+        donacion.setCategoria(request.getCategoria() != null ? request.getCategoria() : request.getTipoDonacion());
+        donacion.setTipoDonacion(request.getTipoDonacion() != null ? request.getTipoDonacion() : request.getCategoria());
+        donacion.setUnidad(request.getUnidad());
+        donacion.setZona(request.getZona());
+        donacion.setNecesidadId(request.getNecesidadId());
         donacion.setCantidad(request.getCantidad());
         donacion.setCentroAcopio(centro);
 
@@ -113,6 +121,10 @@ public class DonacionService {
                 .centroAcopioNombre(d.getCentroAcopio() != null ? d.getCentroAcopio().getNombre() : null)
                 .descripcion(d.getDescripcion())
                 .categoria(d.getCategoria())
+                .tipoDonacion(d.getTipoDonacion() != null ? d.getTipoDonacion() : d.getCategoria())
+                .unidad(d.getUnidad())
+                .zona(d.getZona())
+                .necesidadId(d.getNecesidadId())
                 .cantidad(d.getCantidad())
                 .estado(d.getEstado() != null ? d.getEstado().name() : null)
                 .fechaCreacion(d.getFechaCreacion())

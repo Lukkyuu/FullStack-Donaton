@@ -23,7 +23,7 @@ public class DonacionController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('LOGISTICA')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('LOGISTICA') or hasRole('ORGANIZACION')")
     public ResponseEntity<List<DonacionDTO.Response>> listarTodas() {
         return ResponseEntity.ok(donacionService.listarTodas());
     }

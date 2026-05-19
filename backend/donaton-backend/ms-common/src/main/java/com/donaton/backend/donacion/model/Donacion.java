@@ -31,6 +31,15 @@ public class Donacion {
 
     private String categoria;
 
+    private String tipoDonacion;
+
+    private String unidad;
+
+    private String zona;
+
+    @Column(name = "necesidad_id")
+    private Long necesidadId;
+
     private Integer cantidad;
 
     @Enumerated(EnumType.STRING)

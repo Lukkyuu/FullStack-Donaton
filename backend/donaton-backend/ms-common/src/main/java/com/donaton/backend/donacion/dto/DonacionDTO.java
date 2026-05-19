@@ -13,6 +13,10 @@ public class DonacionDTO {
         private Long centroAcopioId;
         private String descripcion;
         private String categoria;
+        private String tipoDonacion;
+        private String unidad;
+        private String zona;
+        private Long necesidadId;
         private Integer cantidad;
     }
 
@@ -26,6 +30,10 @@ public class DonacionDTO {
         private String centroAcopioNombre;
         private String descripcion;
         private String categoria;
+        private String tipoDonacion;
+        private String unidad;
+        private String zona;
+        private Long necesidadId;
         private Integer cantidad;
         private String estado;
         private LocalDateTime fechaCreacion;
