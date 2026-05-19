@@ -26,6 +26,7 @@ public class NecesidadDTO {
     public static class Response {
         private Long id;
         private String beneficiarioNombre;
+        private String organizacion;
         private String descripcion;
         private String categoria;
         private String tipoNecesidad;
