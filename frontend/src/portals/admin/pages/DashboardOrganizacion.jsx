@@ -10,7 +10,7 @@ export default function DashboardOrganizacion() {
   const navigate = useNavigate();
 
   const { data: necesidades, loading: loadNec, error: errNec } = useApi(
-    () => necesidadesService.listar({ limit: 5 })
+    () => necesidadesService.listarMias({ limit: 5 })
   );
   const { data: donaciones, loading: loadDon, error: errDon } = useApi(
     () => donacionesService.listar({ limit: 5 })

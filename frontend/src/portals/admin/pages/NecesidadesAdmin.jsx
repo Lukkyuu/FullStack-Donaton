@@ -15,7 +15,9 @@ const TIPOS     = ['ALIMENTO', 'ROPA', 'MEDICINA', 'DINERO', 'OTRO'];
 export default function NecesidadesAdmin() {
   const { user, role } = useAuth();
   const isOrg = role === 'ORGANIZACION';
-  const { data, loading, error, degraded, refetch } = useApi(() => necesidadesService.listar());
+  const { data, loading, error, degraded, refetch } = useApi(() => 
+    isOrg ? necesidadesService.listarMias() : necesidadesService.listar()
+  );
 
   const INIT_FORM = {
     descripcion: '', tipoNecesidad: '', urgencia: '',

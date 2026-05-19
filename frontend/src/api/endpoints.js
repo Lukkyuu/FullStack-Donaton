@@ -30,6 +30,8 @@ export const EP = {
   // ms-necesidades
   NECESIDADES: {
     LIST:     '/api/necesidades',
+    MIS_NECESIDADES: '/api/necesidades/mis-necesidades',
+    HEALTH_DB: '/api/necesidades/health/db',
     BY_ID:    (id) => `/api/necesidades/${id}`,
     CREATE:   '/api/necesidades',
     UPDATE:   (id) => `/api/necesidades/${id}`,
