@@ -18,6 +18,7 @@ export const EP = {
   // ms-donaciones
   DONACIONES: {
     LIST:         '/api/donaciones',
+    MIS_DONACIONES: '/api/donaciones/mis-donaciones',
     BY_ID:        (id)  => `/api/donaciones/${id}`,
     CREATE:       '/api/donaciones',
     UPDATE:       (id)  => `/api/donaciones/${id}`,
