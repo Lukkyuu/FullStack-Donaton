@@ -56,4 +56,9 @@ public class NecesidadController {
             @PathVariable Long id, @RequestParam String estado) {
         return ResponseEntity.ok(necesidadService.actualizarEstado(id, estado));
     }
+
+    @GetMapping("/health/db")
+    public ResponseEntity<java.util.Map<String, Object>> testDb() {
+        return ResponseEntity.ok(necesidadService.testDatabaseConnection());
+    }
 }

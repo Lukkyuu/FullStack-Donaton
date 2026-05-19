@@ -59,13 +59,41 @@ public class NecesidadService {
         return listarActivas();
     }
 
+    @org.springframework.beans.factory.annotation.Value("${spring.datasource.url:no-defined}")
+    private String dbUrl;
+
+    public java.util.Map<String, Object> testDatabaseConnection() {
+        java.util.Map<String, Object> report = new java.util.HashMap<>();
+        report.put("dbUrl", dbUrl);
+        try {
+            long userCount = usuarioRepository.count();
+            long needCount = necesidadRepository.count();
+            report.put("status", "UP");
+            report.put("usersCount", userCount);
+            report.put("needsCount", needCount);
+            
+            org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.getName() != null) {
+                String email = auth.getName();
+                report.put("currentUserEmail", email);
+                report.put("currentUserExists", usuarioRepository.findByEmail(email).isPresent());
+            } else {
+                report.put("currentUser", "anonymousOrNull");
+            }
+        } catch (Exception e) {
+            report.put("status", "DOWN");
+            report.put("error", e.getMessage());
+        }
+        return report;
+    }
+
     public NecesidadDTO.Response actualizar(Long id, NecesidadDTO.Request request) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario beneficiario = usuarioRepository.findByEmail(email).orElseThrow();
 
         Necesidad necesidad = necesidadRepository.findById(id).orElseThrow();
         
-        if (!necesidad.getBeneficiario().getId().equals(beneficiario.getId())) {
+        if (necesidad.getBeneficiario() == null || !necesidad.getBeneficiario().getId().equals(beneficiario.getId())) {
             throw new RuntimeException("No tienes permiso para editar esta necesidad");
         }
 
@@ -89,7 +117,7 @@ public class NecesidadService {
     private NecesidadDTO.Response toResponse(Necesidad n) {
         return NecesidadDTO.Response.builder()
                 .id(n.getId())
-                .beneficiarioNombre(n.getBeneficiario().getNombre())
+                .beneficiarioNombre(n.getBeneficiario() != null ? n.getBeneficiario().getNombre() : "Anónimo")
                 .descripcion(n.getDescripcion())
                 .categoria(n.getCategoria())
                 .tipoNecesidad(n.getTipoNecesidad() != null ? n.getTipoNecesidad() : n.getCategoria())
