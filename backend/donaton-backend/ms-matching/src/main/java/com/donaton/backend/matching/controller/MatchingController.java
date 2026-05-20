@@ -28,6 +28,16 @@ public class MatchingController {
         return ResponseEntity.ok(matchingService.listarPendientes());
     }
 
+    @GetMapping("/resultados")
+    public ResponseEntity<List<MatchingDTO.Response>> listarResultados() {
+        return ResponseEntity.ok(matchingService.listarResultados());
+    }
+
+    @GetMapping("/resultados/{id}")
+    public ResponseEntity<MatchingDTO.Response> obtenerPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(matchingService.obtenerPorId(id));
+    }
+
     @PatchMapping("/{id}/estado")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MatchingDTO.Response> actualizarEstado(

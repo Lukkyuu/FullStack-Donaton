@@ -14,6 +14,9 @@ public class MatchingDTO {
         private Long donacionId;
         private Long necesidadId;
         private String estado;
+        private String estrategia;
+        private Double score;
+        private LocalDateTime fechaMatching;
         private LocalDateTime fechaCreacion;
     }
 
