@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             // BCrypt hash for "admin123"
             return new User(
                     "admin@donaton.org",
-                    "$2a$10$R9hGeFApG9wP.7119G4KaeB.M4uF.YF/qfLzJcZf8rU8Zq65P63uO",
+                    "$2a$10$nYaL7CKfg1nfU55Nl165p.a73nPLnJ3NhWGwyjXO5/6e1MptXaEJG",
                     List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
             );
         }
@@ -47,7 +47,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             }
             return new User(
                     email,
-                    "$2a$10$R9hGeFApG9wP.7119G4KaeB.M4uF.YF/qfLzJcZf8rU8Zq65P63uO", // using same admin123 password hash as fallback
+                    "$2a$10$nYaL7CKfg1nfU55Nl165p.a73nPLnJ3NhWGwyjXO5/6e1MptXaEJG", // using same admin123 password hash as fallback
                     List.of(new SimpleGrantedAuthority("ROLE_DONANTE"))
             );
         }
