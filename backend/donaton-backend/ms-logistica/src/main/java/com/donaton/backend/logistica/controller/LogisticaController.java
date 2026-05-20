@@ -2,6 +2,8 @@ package com.donaton.backend.logistica.controller;
 
 import com.donaton.backend.logistica.model.CentroAcopio;
 import com.donaton.backend.donacion.model.Donacion;
+import com.donaton.backend.logistica.model.Recurso;
+import com.donaton.backend.logistica.model.Distribucion;
 import com.donaton.backend.logistica.service.LogisticaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +39,47 @@ public class LogisticaController {
     @PatchMapping("/donaciones/{id}/entregar")
     public ResponseEntity<Donacion> marcarEntregada(@PathVariable Long id) {
         return ResponseEntity.ok(logisticaService.marcarEntregada(id));
+    }
+
+    // --- Endpoints de Recursos ---
+
+    @GetMapping("/recursos")
+    public ResponseEntity<List<Recurso>> obtenerRecursos() {
+        return ResponseEntity.ok(logisticaService.obtenerRecursos());
+    }
+
+    @GetMapping("/recursos/{id}")
+    public ResponseEntity<Recurso> obtenerRecursoPorId(@PathVariable Long id) {
+        Recurso recurso = logisticaService.obtenerRecursoPorId(id);
+        if (recurso == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(recurso);
+    }
+
+    @PostMapping("/recursos")
+    public ResponseEntity<Recurso> crearRecurso(@RequestBody Recurso recurso) {
+        return ResponseEntity.ok(logisticaService.crearRecurso(recurso));
+    }
+
+    // --- Endpoints de Distribuciones ---
+
+    @GetMapping("/distribuciones")
+    public ResponseEntity<List<Distribucion>> obtenerDistribuciones() {
+        return ResponseEntity.ok(logisticaService.obtenerDistribuciones());
+    }
+
+    @GetMapping("/distribuciones/{id}")
+    public ResponseEntity<Distribucion> obtenerDistribucionPorId(@PathVariable Long id) {
+        Distribucion distribucion = logisticaService.obtenerDistribucionPorId(id);
+        if (distribucion == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(distribucion);
+    }
+
+    @PostMapping("/distribuciones")
+    public ResponseEntity<Distribucion> crearDistribucion(@RequestBody Distribucion distribucion) {
+        return ResponseEntity.ok(logisticaService.crearDistribucion(distribucion));
     }
 }
