@@ -43,4 +43,17 @@ public class UsuarioDTO {
         private String contraseñaActual;
         private String contraseñaNueva;
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CrearUsuarioRequest {
+        private String nombre;
+        private String email;
+        private String password;
+        private String role;
+        private String zona;
+        private String telefono;
+    }
 }

@@ -7,12 +7,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping({"/api/usuarios", "/usuarios"})
 @RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+
+    @GetMapping
+    public ResponseEntity<List<UsuarioDTO.Response>> obtenerTodos() {
+        return ResponseEntity.ok(usuarioService.obtenerTodos());
+    }
+
+    @PostMapping
+    public ResponseEntity<UsuarioDTO.Response> crearUsuario(
+            @Valid @RequestBody UsuarioDTO.CrearUsuarioRequest request) {
+        return ResponseEntity.ok(usuarioService.crearUsuario(request));
+    }
 
     @GetMapping("/perfil")
     public ResponseEntity<UsuarioDTO.PerfilResponse> obtenerPerfil() {
