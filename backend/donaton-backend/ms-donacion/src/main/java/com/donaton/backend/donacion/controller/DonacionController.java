@@ -17,7 +17,7 @@ public class DonacionController {
     private final DonacionService donacionService;
 
     @PostMapping
-    @PreAuthorize("hasRole('DONANTE')")
+    @PreAuthorize("hasRole('DONANTE') or hasRole('ADMIN')")
     public ResponseEntity<DonacionDTO.Response> crear(@RequestBody DonacionDTO.Request request) {
         return ResponseEntity.ok(donacionService.crear(request));
     }
@@ -39,15 +39,25 @@ public class DonacionController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('DONANTE')")
+    @PreAuthorize("hasRole('DONANTE') or hasRole('ADMIN')")
     public ResponseEntity<DonacionDTO.Response> actualizar(
             @PathVariable Long id, @RequestBody DonacionDTO.Request request) {
-        return ResponseEntity.ok(donacionService.actualizar(id, request));
+        DonacionDTO.Response response = donacionService.actualizar(id, request);
+        if (request.getEstado() != null) {
+            response = donacionService.actualizarEstado(id, request.getEstado());
+        }
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{id}/cancelar")
-    @PreAuthorize("hasRole('DONANTE')")
+    @PreAuthorize("hasRole('DONANTE') or hasRole('ADMIN')")
     public ResponseEntity<DonacionDTO.Response> cancelar(@PathVariable Long id) {
+        return ResponseEntity.ok(donacionService.cancelar(id));
+    }
+
+    @PatchMapping("/{id}/cancelar")
+    @PreAuthorize("hasRole('DONANTE') or hasRole('ADMIN')")
+    public ResponseEntity<DonacionDTO.Response> cancelarPatch(@PathVariable Long id) {
         return ResponseEntity.ok(donacionService.cancelar(id));
     }
 

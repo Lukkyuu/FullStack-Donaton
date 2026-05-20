@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,20 +23,30 @@ public class NotificacionService {
     private final UsuarioRepository usuarioRepository;
     private final Map<Long, NotificacionDTO.PreferenciasResponse> preferencias = new HashMap<>();
 
+    private static final Map<String, Map<String, Object>> USER_PREFS = new java.util.concurrent.ConcurrentHashMap<>();
+
     public List<NotificacionDTO.Response> obtenerMisNotificaciones() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
-        
-        return notificacionRepository.findByUsuarioId(usuario.getId())
-                .stream().map(this::toResponse).collect(Collectors.toList());
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
+
+            return notificacionRepository.findByUsuarioId(usuario.getId())
+                    .stream().map(this::toResponse).collect(Collectors.toList());
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 
     public List<NotificacionDTO.Response> obtenerNoLeidas() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
-        
-        return notificacionRepository.findByUsuarioIdAndLeida(usuario.getId(), false)
-                .stream().map(this::toResponse).collect(Collectors.toList());
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
+
+            return notificacionRepository.findByUsuarioIdAndLeida(usuario.getId(), false)
+                    .stream().map(this::toResponse).collect(Collectors.toList());
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 
     public void marcarComoLeida(Long id) {
@@ -51,7 +62,7 @@ public class NotificacionService {
                 .recibirSMS(request.isRecibirSMS())
                 .recibirNotificaciones(request.isRecibirNotificaciones())
                 .build();
-        
+
         preferencias.put(usuarioId, prefs);
     }
 
@@ -62,6 +73,28 @@ public class NotificacionService {
                 .recibirSMS(true)
                 .recibirNotificaciones(true)
                 .build());
+    }
+
+    public Map<String, Object> obtenerMisPreferenciasMap() {
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            return USER_PREFS.getOrDefault(email, Map.of(
+                "canales", Map.of("email", true, "push", false, "sms", false),
+                "eventos", Map.of("nueva_donacion", true, "matching_realizado", true, "donacion_entregada", true, "necesidad_cerrada", true, "cambio_estado", false)
+            ));
+        } catch (Exception e) {
+            return Map.of(
+                "canales", Map.of("email", true, "push", false, "sms", false),
+                "eventos", Map.of("nueva_donacion", true, "matching_realizado", true, "donacion_entregada", true, "necesidad_cerrada", true, "cambio_estado", false)
+            );
+        }
+    }
+
+    public void guardarMisPreferenciasMap(Map<String, Object> body) {
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            USER_PREFS.put(email, body);
+        } catch (Exception ignored) {}
     }
 
     private NotificacionDTO.Response toResponse(Notificacion n) {

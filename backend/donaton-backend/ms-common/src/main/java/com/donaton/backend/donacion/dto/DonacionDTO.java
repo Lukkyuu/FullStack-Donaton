@@ -18,6 +18,7 @@ public class DonacionDTO {
         private String zona;
         private Long necesidadId;
         private Integer cantidad;
+        private String estado;
     }
 
     @Data
