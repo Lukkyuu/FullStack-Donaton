@@ -16,12 +16,12 @@
       ],
       "environment": [
         {"name": "AUTH_HOST", "value": "127.0.0.1"},
-        {"name": "DONACION_HOST", "value": "172.31.5.156"},
-        {"name": "LOGISTICA_HOST", "value": "172.31.5.156"},
-        {"name": "NECESIDAD_HOST", "value": "172.31.5.156"},
-        {"name": "USUARIOS_HOST", "value": "172.31.5.156"},
-        {"name": "MATCHING_HOST", "value": "172.31.5.156"},
-        {"name": "NOTIFICACIONES_HOST", "value": "172.31.5.156"}
+        {"name": "DONACION_HOST", "value": "127.0.0.1"},
+        {"name": "LOGISTICA_HOST", "value": "127.0.0.1"},
+        {"name": "NECESIDAD_HOST", "value": "127.0.0.1"},
+        {"name": "USUARIOS_HOST", "value": "127.0.0.1"},
+        {"name": "MATCHING_HOST", "value": "127.0.0.1"},
+        {"name": "NOTIFICACIONES_HOST", "value": "127.0.0.1"}
       ],
       "essential": true,
       "logConfiguration": {
@@ -63,7 +63,186 @@
         }
       }
     },
-
+    {
+      "name": "donaton-donacion-container",
+      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-donacion:latest",
+      "portMappings": [
+        {
+          "containerPort": 8082,
+          "hostPort": 8082,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_USERNAME", "value": "root"},
+        {"name": "DB_PASSWORD", "value": "password123"},
+        {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
+        {"name": "RABBITMQ_PORT", "value": "5672"},
+        {"name": "RABBITMQ_USERNAME", "value": "guest"},
+        {"name": "RABBITMQ_PASSWORD", "value": "guest"},
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/donaton-backend",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
+    {
+      "name": "donaton-logistica-container",
+      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-logistica:latest",
+      "portMappings": [
+        {
+          "containerPort": 8083,
+          "hostPort": 8083,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_USERNAME", "value": "root"},
+        {"name": "DB_PASSWORD", "value": "password123"},
+        {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
+        {"name": "RABBITMQ_PORT", "value": "5672"},
+        {"name": "RABBITMQ_USERNAME", "value": "guest"},
+        {"name": "RABBITMQ_PASSWORD", "value": "guest"},
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/donaton-backend",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
+    {
+      "name": "donaton-necesidad-container",
+      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-necesidad:latest",
+      "portMappings": [
+        {
+          "containerPort": 8084,
+          "hostPort": 8084,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_USERNAME", "value": "root"},
+        {"name": "DB_PASSWORD", "value": "password123"},
+        {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
+        {"name": "RABBITMQ_PORT", "value": "5672"},
+        {"name": "RABBITMQ_USERNAME", "value": "guest"},
+        {"name": "RABBITMQ_PASSWORD", "value": "guest"},
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/donaton-backend",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
+    {
+      "name": "donaton-usuarios-container",
+      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-usuarios:latest",
+      "portMappings": [
+        {
+          "containerPort": 8085,
+          "hostPort": 8085,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_USERNAME", "value": "root"},
+        {"name": "DB_PASSWORD", "value": "password123"},
+        {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
+        {"name": "RABBITMQ_PORT", "value": "5672"},
+        {"name": "RABBITMQ_USERNAME", "value": "guest"},
+        {"name": "RABBITMQ_PASSWORD", "value": "guest"},
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/donaton-backend",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
+    {
+      "name": "donaton-matching-container",
+      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-matching:latest",
+      "portMappings": [
+        {
+          "containerPort": 8086,
+          "hostPort": 8086,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_USERNAME", "value": "root"},
+        {"name": "DB_PASSWORD", "value": "password123"},
+        {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
+        {"name": "RABBITMQ_PORT", "value": "5672"},
+        {"name": "RABBITMQ_USERNAME", "value": "guest"},
+        {"name": "RABBITMQ_PASSWORD", "value": "guest"},
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/donaton-backend",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
+    {
+      "name": "donaton-notificaciones-container",
+      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-notificaciones:latest",
+      "portMappings": [
+        {
+          "containerPort": 8087,
+          "hostPort": 8087,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_USERNAME", "value": "root"},
+        {"name": "DB_PASSWORD", "value": "password123"},
+        {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
+        {"name": "RABBITMQ_PORT", "value": "5672"},
+        {"name": "RABBITMQ_USERNAME", "value": "guest"},
+        {"name": "RABBITMQ_PASSWORD", "value": "guest"},
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/donaton-backend",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
     {
       "name": "rabbitmq-container",
       "image": "rabbitmq:3-management",
@@ -97,6 +276,6 @@
   "requiresCompatibilities": [
     "FARGATE"
   ],
-  "cpu": "1024",
-  "memory": "2048"
+  "cpu": "2048",
+  "memory": "4096"
 }

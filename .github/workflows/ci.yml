@@ -51,6 +51,18 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker build -f Dockerfile.auth -t $ECR_REGISTRY/donaton-auth:$IMAGE_TAG .
         docker push $ECR_REGISTRY/donaton-auth:$IMAGE_TAG
+        docker build -f Dockerfile.necesidad -t $ECR_REGISTRY/donaton-necesidad:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/donaton-necesidad:$IMAGE_TAG
+        docker build -f Dockerfile.donacion -t $ECR_REGISTRY/donaton-donacion:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/donaton-donacion:$IMAGE_TAG
+        docker build -f Dockerfile.usuarios -t $ECR_REGISTRY/donaton-usuarios:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/donaton-usuarios:$IMAGE_TAG
+        docker build -f Dockerfile.logistica -t $ECR_REGISTRY/donaton-logistica:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/donaton-logistica:$IMAGE_TAG
+        docker build -f Dockerfile.matching -t $ECR_REGISTRY/donaton-matching:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/donaton-matching:$IMAGE_TAG
+        docker build -f Dockerfile.notificaciones -t $ECR_REGISTRY/donaton-notificaciones:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/donaton-notificaciones:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Fill in the new image ID in the Amazon ECS task definition
@@ -69,10 +81,58 @@ jobs:
         container-name: donaton-auth-container
         image: ${{ steps.login-ecr.outputs.registry }}/donaton-auth:latest
 
+    - name: Fill in the new image ID for Necesidad container
+      id: task-def-necesidad
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-auth.outputs.task-definition }}
+        container-name: donaton-necesidad-container
+        image: ${{ steps.login-ecr.outputs.registry }}/donaton-necesidad:latest
+
+    - name: Fill in the new image ID for Donacion container
+      id: task-def-donacion
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-necesidad.outputs.task-definition }}
+        container-name: donaton-donacion-container
+        image: ${{ steps.login-ecr.outputs.registry }}/donaton-donacion:latest
+
+    - name: Fill in the new image ID for Usuarios container
+      id: task-def-usuarios
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-donacion.outputs.task-definition }}
+        container-name: donaton-usuarios-container
+        image: ${{ steps.login-ecr.outputs.registry }}/donaton-usuarios:latest
+
+    - name: Fill in the new image ID for Logistica container
+      id: task-def-logistica
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-usuarios.outputs.task-definition }}
+        container-name: donaton-logistica-container
+        image: ${{ steps.login-ecr.outputs.registry }}/donaton-logistica:latest
+
+    - name: Fill in the new image ID for Matching container
+      id: task-def-matching
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-logistica.outputs.task-definition }}
+        container-name: donaton-matching-container
+        image: ${{ steps.login-ecr.outputs.registry }}/donaton-matching:latest
+
+    - name: Fill in the new image ID for Notificaciones container
+      id: task-def-notificaciones
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-matching.outputs.task-definition }}
+        container-name: donaton-notificaciones-container
+        image: ${{ steps.login-ecr.outputs.registry }}/donaton-notificaciones:latest
+
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def-auth.outputs.task-definition }}
+        task-definition: ${{ steps.task-def-notificaciones.outputs.task-definition }}
         service: donaton-backend-service-v2
         cluster: donaton-cluster
         wait-for-service-stability: true
