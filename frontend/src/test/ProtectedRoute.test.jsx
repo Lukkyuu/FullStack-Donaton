@@ -14,8 +14,8 @@ vi.mock('../auth/useAuth.js', () => ({
 }));
 
 // Mock del LoadingSpinner
-vi.mock('../shared/components/LoadingSpinner.jsx', () => ({
-  default: () => <div data-testid="spinner">Cargando...</div>,
+vi.mock('../shared/components/index.jsx', () => ({
+  LoadingSpinner: () => <div data-testid="spinner">Cargando...</div>,
 }));
 
 import { useAuth } from '../auth/useAuth.js';

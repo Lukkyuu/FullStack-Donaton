@@ -112,8 +112,8 @@ services:
       - NECESIDAD_HOST=${NECESIDAD_HOST:-ms-necesidad}
       - MATCHING_HOST=${MATCHING_HOST:-ms-matching}
       - NOTIFICACIONES_HOST=${NOTIFICACIONES_HOST:-ms-notificaciones}
-      - FRONTEND_ORIGIN=${FRONTEND_ORIGIN:-http://donaton-frontend-bucket-532149873618.s3-website-us-west-2.amazonaws.com}
-      - FRONTEND_ORIGINS=${FRONTEND_ORIGINS:-http://donaton-frontend-bucket-532149873618.s3-website-us-west-2.amazonaws.com}
+      - FRONTEND_ORIGIN=${FRONTEND_ORIGIN:-http://donaton-frontend-bucket-005603512319.s3-website-us-west-2.amazonaws.com}
+      - FRONTEND_ORIGINS=${FRONTEND_ORIGINS:-http://donaton-frontend-bucket-005603512319.s3-website-us-west-2.amazonaws.com}
       - USUARIOS_HOST=${USUARIOS_HOST:-172.31.5.156}
     depends_on:
       - ms-auth

@@ -167,5 +167,4 @@ jobs:
         aws-region: us-west-2
         
     - name: Deploy to S3
-      run: aws s3 sync dist/ s3://donaton-frontend-bucket-532149873618/ --delete
-
+      run: aws s3 sync dist/ s3://donaton-frontend-bucket-633074158959/ --delete

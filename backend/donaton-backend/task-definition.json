@@ -1,12 +1,12 @@
 {
   "family": "donaton-backend-task",
   "networkMode": "awsvpc",
-  "executionRoleArn": "arn:aws:iam::532149873618:role/LabRole",
-  "taskRoleArn": "arn:aws:iam::532149873618:role/LabRole",
+  "executionRoleArn": "arn:aws:iam::005603512319:role/LabRole",
+  "taskRoleArn": "arn:aws:iam::005603512319:role/LabRole",
   "containerDefinitions": [
     {
       "name": "donaton-backend-container",
-      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-backend:latest",
+      "image": "005603512319.dkr.ecr.us-west-2.amazonaws.com/donaton-backend:latest",
       "portMappings": [
         {
           "containerPort": 8080,
@@ -21,7 +21,8 @@
         {"name": "NECESIDAD_HOST", "value": "127.0.0.1"},
         {"name": "USUARIOS_HOST", "value": "127.0.0.1"},
         {"name": "MATCHING_HOST", "value": "127.0.0.1"},
-        {"name": "NOTIFICACIONES_HOST", "value": "127.0.0.1"}
+        {"name": "NOTIFICACIONES_HOST", "value": "127.0.0.1"},
+        {"name": "JAVA_TOOL_OPTIONS", "value": "-Xmx256m"}
       ],
       "essential": true,
       "logConfiguration": {
@@ -35,7 +36,7 @@
     },
     {
       "name": "donaton-auth-container",
-      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-auth:latest",
+      "image": "005603512319.dkr.ecr.us-west-2.amazonaws.com/donaton-auth:latest",
       "portMappings": [
         {
           "containerPort": 8081,
@@ -44,14 +45,15 @@
         }
       ],
       "environment": [
-        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.chde6qvgjsfp.us-west-2.rds.amazonaws.com:5432/postgres"},
         {"name": "DB_USERNAME", "value": "root"},
         {"name": "DB_PASSWORD", "value": "password123"},
         {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
         {"name": "RABBITMQ_PORT", "value": "5672"},
         {"name": "RABBITMQ_USERNAME", "value": "guest"},
         {"name": "RABBITMQ_PASSWORD", "value": "guest"},
-        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"},
+        {"name": "JAVA_TOOL_OPTIONS", "value": "-Xmx384m"}
       ],
       "essential": true,
       "logConfiguration": {
@@ -65,7 +67,7 @@
     },
     {
       "name": "donaton-donacion-container",
-      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-donacion:latest",
+      "image": "005603512319.dkr.ecr.us-west-2.amazonaws.com/donaton-donacion:latest",
       "portMappings": [
         {
           "containerPort": 8082,
@@ -74,14 +76,15 @@
         }
       ],
       "environment": [
-        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.chde6qvgjsfp.us-west-2.rds.amazonaws.com:5432/postgres"},
         {"name": "DB_USERNAME", "value": "root"},
         {"name": "DB_PASSWORD", "value": "password123"},
         {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
         {"name": "RABBITMQ_PORT", "value": "5672"},
         {"name": "RABBITMQ_USERNAME", "value": "guest"},
         {"name": "RABBITMQ_PASSWORD", "value": "guest"},
-        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"},
+        {"name": "JAVA_TOOL_OPTIONS", "value": "-Xmx384m"}
       ],
       "essential": true,
       "logConfiguration": {
@@ -95,7 +98,7 @@
     },
     {
       "name": "donaton-logistica-container",
-      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-logistica:latest",
+      "image": "005603512319.dkr.ecr.us-west-2.amazonaws.com/donaton-logistica:latest",
       "portMappings": [
         {
           "containerPort": 8083,
@@ -104,14 +107,15 @@
         }
       ],
       "environment": [
-        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.chde6qvgjsfp.us-west-2.rds.amazonaws.com:5432/postgres"},
         {"name": "DB_USERNAME", "value": "root"},
         {"name": "DB_PASSWORD", "value": "password123"},
         {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
         {"name": "RABBITMQ_PORT", "value": "5672"},
         {"name": "RABBITMQ_USERNAME", "value": "guest"},
         {"name": "RABBITMQ_PASSWORD", "value": "guest"},
-        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"},
+        {"name": "JAVA_TOOL_OPTIONS", "value": "-Xmx384m"}
       ],
       "essential": true,
       "logConfiguration": {
@@ -125,7 +129,7 @@
     },
     {
       "name": "donaton-necesidad-container",
-      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-necesidad:latest",
+      "image": "005603512319.dkr.ecr.us-west-2.amazonaws.com/donaton-necesidad:latest",
       "portMappings": [
         {
           "containerPort": 8084,
@@ -134,14 +138,15 @@
         }
       ],
       "environment": [
-        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.chde6qvgjsfp.us-west-2.rds.amazonaws.com:5432/postgres"},
         {"name": "DB_USERNAME", "value": "root"},
         {"name": "DB_PASSWORD", "value": "password123"},
         {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
         {"name": "RABBITMQ_PORT", "value": "5672"},
         {"name": "RABBITMQ_USERNAME", "value": "guest"},
         {"name": "RABBITMQ_PASSWORD", "value": "guest"},
-        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"},
+        {"name": "JAVA_TOOL_OPTIONS", "value": "-Xmx384m"}
       ],
       "essential": true,
       "logConfiguration": {
@@ -155,7 +160,7 @@
     },
     {
       "name": "donaton-usuarios-container",
-      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-usuarios:latest",
+      "image": "005603512319.dkr.ecr.us-west-2.amazonaws.com/donaton-usuarios:latest",
       "portMappings": [
         {
           "containerPort": 8085,
@@ -164,14 +169,15 @@
         }
       ],
       "environment": [
-        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.chde6qvgjsfp.us-west-2.rds.amazonaws.com:5432/postgres"},
         {"name": "DB_USERNAME", "value": "root"},
         {"name": "DB_PASSWORD", "value": "password123"},
         {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
         {"name": "RABBITMQ_PORT", "value": "5672"},
         {"name": "RABBITMQ_USERNAME", "value": "guest"},
         {"name": "RABBITMQ_PASSWORD", "value": "guest"},
-        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"},
+        {"name": "JAVA_TOOL_OPTIONS", "value": "-Xmx384m"}
       ],
       "essential": true,
       "logConfiguration": {
@@ -185,7 +191,7 @@
     },
     {
       "name": "donaton-matching-container",
-      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-matching:latest",
+      "image": "005603512319.dkr.ecr.us-west-2.amazonaws.com/donaton-matching:latest",
       "portMappings": [
         {
           "containerPort": 8086,
@@ -194,14 +200,15 @@
         }
       ],
       "environment": [
-        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.chde6qvgjsfp.us-west-2.rds.amazonaws.com:5432/postgres"},
         {"name": "DB_USERNAME", "value": "root"},
         {"name": "DB_PASSWORD", "value": "password123"},
         {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
         {"name": "RABBITMQ_PORT", "value": "5672"},
         {"name": "RABBITMQ_USERNAME", "value": "guest"},
         {"name": "RABBITMQ_PASSWORD", "value": "guest"},
-        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"},
+        {"name": "JAVA_TOOL_OPTIONS", "value": "-Xmx384m"}
       ],
       "essential": true,
       "logConfiguration": {
@@ -215,7 +222,7 @@
     },
     {
       "name": "donaton-notificaciones-container",
-      "image": "532149873618.dkr.ecr.us-west-2.amazonaws.com/donaton-notificaciones:latest",
+      "image": "005603512319.dkr.ecr.us-west-2.amazonaws.com/donaton-notificaciones:latest",
       "portMappings": [
         {
           "containerPort": 8087,
@@ -224,14 +231,15 @@
         }
       ],
       "environment": [
-        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.caskolmhpgje.us-west-2.rds.amazonaws.com:5432/postgres"},
+        {"name": "DB_URL", "value": "jdbc:postgresql://donaton-db.chde6qvgjsfp.us-west-2.rds.amazonaws.com:5432/postgres"},
         {"name": "DB_USERNAME", "value": "root"},
         {"name": "DB_PASSWORD", "value": "password123"},
         {"name": "RABBITMQ_HOST", "value": "127.0.0.1"},
         {"name": "RABBITMQ_PORT", "value": "5672"},
         {"name": "RABBITMQ_USERNAME", "value": "guest"},
         {"name": "RABBITMQ_PASSWORD", "value": "guest"},
-        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"}
+        {"name": "JWT_SECRET", "value": "donaton_secret_key_must_be_at_least_32_chars_long!"},
+        {"name": "JAVA_TOOL_OPTIONS", "value": "-Xmx384m"}
       ],
       "essential": true,
       "logConfiguration": {
@@ -276,6 +284,6 @@
   "requiresCompatibilities": [
     "FARGATE"
   ],
-  "cpu": "4096",
-  "memory": "16384"
+  "cpu": "2048",
+  "memory": "8192"
 }
