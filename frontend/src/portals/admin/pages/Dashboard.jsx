@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../../auth/useAuth.js';
 import { useApi } from '../../../shared/hooks/useApi.js';
 import { donacionesService }  from '../../../api/services/donacionesService.js';
@@ -10,16 +10,51 @@ import {
   LoadingSpinner, DegradedBanner, ErrorBox, StatusBadge,
 } from '../../../shared/components/index.jsx';
 
-function StatCard({ icon, label, value, sub, accent }) {
+function AnimatedNumber({ value, duration = 900 }) {
+  const [display, setDisplay] = useState(0);
+  const prev = useRef(0);
+  useEffect(() => {
+    const end = Number(value) || 0;
+    const start = prev.current;
+    if (start === end) return;
+    const t0 = performance.now();
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / duration);
+      const ease = 1 - Math.pow(1 - p, 3);
+      setDisplay(Math.round(start + (end - start) * ease));
+      if (p < 1) requestAnimationFrame(tick);
+      else prev.current = end;
+    };
+    requestAnimationFrame(tick);
+  }, [value, duration]);
+  return <>{display}</>;
+}
+
+function StatCard({ icon, label, value, sub, accent, delay = 0 }) {
   return (
-    <div className="stat-card" style={{ borderTop: `3px solid ${accent ?? 'var(--brand-primary)'}` }}>
-      <div style={{ fontSize: 22, marginBottom: 8 }}>{icon}</div>
+    <div
+      className="stat-card hover-lift"
+      style={{
+        borderTop: `3px solid ${accent ?? 'var(--primary)'}`,
+        animation: `fadeInUp 0.45s ease ${delay}s both`,
+        position: 'relative', overflow: 'hidden',
+      }}
+    >
+      <div style={{
+        position: 'absolute', top: -12, right: -12,
+        width: 56, height: 56, borderRadius: '50%',
+        background: (accent ?? 'var(--primary)') + '15', pointerEvents: 'none',
+      }} />
+      <div style={{ fontSize: 24, marginBottom: 8, position: 'relative' }}>{icon}</div>
       <div className="stat-label">{label}</div>
-      <div className="stat-value" style={{ fontSize: 24 }}>{value ?? '—'}</div>
-      {sub && <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>{sub}</div>}
+      <div className="stat-value" style={{ color: accent ?? 'var(--primary)', position: 'relative' }}>
+        <AnimatedNumber value={value ?? 0} />
+      </div>
+      {sub && <div style={{ fontSize: 12, color: 'var(--on-surface-variant)', marginTop: 4, fontWeight: 500 }}>{sub}</div>}
     </div>
   );
 }
+
 
 export default function AdminHome() {
   const { role } = useAuth();
