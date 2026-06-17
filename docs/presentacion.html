@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donaton - Presentación de Persistencia y Pruebas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #080c14;
+            --card-bg: rgba(13, 20, 35, 0.6);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-primary: #6366f1;
+            --accent-secondary: #a855f7;
+            --accent-light: #38bdf8;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+        }
+
+        /* Orbes de Fondo Animados */
+        .glowing-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 1;
+            opacity: 0.15;
+            pointer-events: none;
+            animation: float 20s infinite alternate;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent-primary);
+            top: -10%;
+            left: -10%;
+        }
+
+        .orb-2 {
+            width: 450px;
+            height: 450px;
+            background: var(--accent-secondary);
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-light);
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -10s;
+            opacity: 0.08;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 30px) scale(1.1); }
+        }
+
+        /* Contenedor de Diapositivas (Viewport) */
+        .viewport {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Envoltura para transiciones horizontales */
+        .slides-wrapper {
+            display: flex;
+            width: 800%; /* 8 diapositivas */
+            height: 100%;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Estructura de Diapositiva */
+        .slide {
+            width: 12.5%; /* 1/8 de la envoltura */
+            height: 100%;
+            padding: 3.5rem 5rem 4rem 5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Cabecera */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .slide-header h2 {
+            font-size: 26pt;
+            font-weight: 800;
+            background: linear-gradient(135deg, #c084fc 0%, #6366f1 50%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .slide-header .slide-tag {
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            color: #a5b4fc;
+            padding: 0.4rem 0.85rem;
+            border-radius: 50px;
+            font-size: 8.5pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Cuerpo */
+        .slide-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        /* Footer */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8.5pt;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--card-border);
+            padding-top: 0.8rem;
+        }
+
+        .slide-footer .logo-span {
+            font-weight: 800;
+            color: var(--text-primary);
+            font-size: 10pt;
+        }
+
+        .slide-footer .logo-span span {
+            color: var(--accent-primary);
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+
+        /* Tarjetas con Glassmorphism */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.8rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: transparent;
+            transition: background 0.3s ease;
+        }
+
+        .card.active-border::before { background: var(--accent-primary); }
+        .card.success-border::before { background: var(--success); }
+        .card.warning-border::before { background: var(--warning); }
+        .card.light-border::before { background: var(--accent-light); }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card h3 {
+            font-size: 13.5pt;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card p {
+            font-size: 10pt;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        ul {
+            margin-left: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        li {
+            color: var(--text-secondary);
+            font-size: 9.5pt;
+            margin-bottom: 0.4rem;
+            line-height: 1.4;
+        }
+
+        li strong {
+            color: var(--text-primary);
+        }
+
+        /* Código */
+        pre {
+            background: #05080e;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 8pt;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+            color: #38bdf8;
+            height: 100%;
+            max-height: 250px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        .keyword { color: #f43f5e; font-weight: bold; }
+        .type { color: #0ea5e9; }
+        .string { color: #10b981; }
+        .annotation { color: #fbbf24; }
+        .comment { color: #64748b; font-style: italic; }
+
+        /* Cover Diapositiva */
+        .cover-content {
+            text-align: center;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .cover-content h1 {
+            font-size: 40pt;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #c084fc 40%, #6366f1 75%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+        }
+
+        .cover-content p.subtitle {
+            font-size: 15pt;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .cover-meta {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 2rem;
+        }
+
+        .cover-meta-item h4 {
+            font-size: 8pt;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 0.3rem;
+            letter-spacing: 1px;
+        }
+
+        .cover-meta-item p {
+            font-size: 11.5pt;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Diagrama Visual de Arquitectura */
+        .arch-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .arch-node {
+            background: rgba(13, 20, 35, 0.8);
+            border: 1px solid var(--card-border);
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 9pt;
+            font-weight: 600;
+            min-width: 140px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-bottom: 3px solid var(--accent-primary);
+        }
+
+        .arch-node.gateway {
+            border-bottom-color: var(--accent-secondary);
+        }
+
+        .arch-node.service {
+            border-bottom-color: var(--success);
+        }
+
+        .arch-node.db {
+            border-bottom-color: var(--warning);
+        }
+
+        .arch-arrow {
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+
+        /* Medidor Circular de Cobertura */
+        .circle-charts {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 100%;
+        }
+
+        .circle-chart-item {
+            text-align: center;
+            position: relative;
+        }
+
+        .circle-svg {
+            width: 130px;
+            height: 130px;
+            transform: rotate(-90deg);
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 10;
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease-in-out;
+        }
+
+        .circle-progress.p-100 {
+            stroke: var(--success);
+            stroke-dasharray: 377;
+            stroke-dashoffset: 0;
+        }
+
+        .circle-progress.p-43 {
+            stroke: var(--accent-primary);
+            stroke-dasharray: 377;
+            stroke-dashoffset: 213; /* 43.58% de 377 es ~164 ocupado, 213 libre */
+        }
+
+        .circle-progress.p-37 {
+            stroke: var(--accent-light);
+            stroke-dasharray: 377;
+            stroke-dashoffset: 235; /* 37.5% es ~141 ocupado, 235 libre */
+        }
+
+        .circle-text {
+            position: absolute;
+            top: 42px;
+            left: 0;
+            width: 130px;
+            text-align: center;
+            font-size: 18pt;
+            font-weight: 700;
+        }
+
+        .circle-label {
+            margin-top: 1rem;
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        /* Controles */
+        .controls {
+            position: absolute;
+            bottom: 2rem;
+            right: 5rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+            transform: scale(1.05);
+        }
+
+        .progress-bar-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.04);
+            z-index: 100;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-light));
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+
+        /* Impresión y PDF */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+            html, body {
+                width: 297mm;
+                height: 210mm;
+                overflow: hidden;
+                background: var(--bg-color) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .glowing-orb {
+                display: none !important;
+            }
+            .viewport {
+                overflow: visible !important;
+            }
+            .slides-wrapper {
+                display: block !important;
+                transform: none !important;
+                width: auto !important;
+                height: auto !important;
+            }
+            .slide {
+                display: flex !important;
+                width: 297mm !important;
+                height: 210mm !important;
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                position: relative !important;
+                padding: 1.8cm 2.2cm !important;
+                box-sizing: border-box !important;
+            }
+            .controls, .progress-bar-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Globos luminosos de fondo -->
+    <div class="glowing-orb orb-1"></div>
+    <div class="glowing-orb orb-2"></div>
+    <div class="glowing-orb orb-3"></div>
+
+    <div class="viewport">
+        <div class="slides-wrapper" id="slides-wrapper">
+            
+            <!-- DIAPOSITIVA 1: PORTADA -->
+            <div class="slide">
+                <div></div> <!-- Spacer -->
+                <div class="cover-content">
+                    <h1>Donatón: Persistencia y Calidad de Software</h1>
+                    <p class="subtitle">Análisis del Shared Kernel JPA, Pruebas Automatizadas y Cobertura de Código</p>
+                    <div class="cover-meta">
+                        <div class="cover-meta-item">
+                            <h4>Proyecto</h4>
+                            <p>Donatón Web Platform</p>
+                        </div>
+                        <div class="cover-meta-item">
+                            <h4>Arquitectura</h4>
+                            <p>BFF + Microservicios Spring Boot</p>
+                        </div>
+                        <div class="cover-meta-item">
+                            <h4>Control de Calidad</h4>
+                            <p>Vitest & Maven Surefire</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide-footer">
+                    <span class="logo-span">Donat<span>ón</span></span>
+                    <span>Diapositiva 1 de 8</span>
+                </div>
+            </div>
+
+            <!-- DIAPOSITIVA 2: ARQUITECTURA DE LA PLATAFORMA -->
+            <div class="slide">
+                <div class="slide-header">
+                    <h2>Arquitectura de la Plataforma</h2>
+                    <span class="slide-tag">Arquitectura</span>
+                </div>
+                <div class="slide-body">
+                    <div class="grid-2">
+                        <div class="card active-border">
+                            <h3>BFF & Microservicios Desacoplados</h3>
+                            <p>
+                                La plataforma humanitaria Donatón se basa en microservicios independientes orquestados por Docker Compose. Un <strong>API Gateway (ms-gateway)</strong> actúa como BFF centralizando CORS y el enrutamiento. El acoplamiento temporal se elimina mediante mensajería asíncrona distribuida por <strong>RabbitMQ</strong>.
+                            </p>
+                            <p style="margin-top: 0.5rem;">
+                                Cada servicio posee su base de datos aislada, sincronizando estados de forma asíncrona para maximizar la resiliencia y disponibilidad del ecosistema.
+                            </p>
+                        </div>
+                        <div class="card light-border">
+                            <h3>Shared Kernel (ms-common)</h3>
+                            <p>
+                                Para garantizar la integridad en los esquemas de bases de datos compartidas y optimizar el desarrollo, se ha estructurado una biblioteca común: <code>ms-common</code>.
+                            </p>
+                            <ul style="margin-top: 0.6rem;">
+                                <li><strong>Entidades y Modelado JPA:</strong> Estructuras de tablas centralizadas.</li>
+                                <li><strong>Seguridad y JWT:</strong> Filtros e inyección de contexto de seguridad.</li>
+                                <li><strong>Mensajería:</strong> Estructuras DTO de RabbitMQ consistentes.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Diagrama de Flujo visual -->
+                    <div class="arch-diagram">
+                        <div class="arch-node">React Client SPA</div>
+                        <div class="arch-arrow">➡</div>
+                        <div class="arch-node gateway">Nginx BFF / Gateway</div>
+                        <div class="arch-arrow">➡</div>
+                        <div class="arch-node service">Microservicios (Spring)</div>
+                        <div class="arch-arrow">➡</div>
+                        <div class="arch-node db">PostgreSQL & Rabbit</div>
+                    </div>
+                </div>
+                <div class="slide-footer">
+                    <span class="logo-span">Donat<span>ón</span></span>
+                    <span>Diapositiva 2 de 8</span>
+                </div>
+            </div>
+
+            <!-- DIAPOSITIVA 3: CAPA DE PERSISTENCIA -->
+            <div class="slide">
+                <div class="slide-header">
+                    <h2>Persistencia con JPA y PostgreSQL</h2>
+                    <span class="slide-tag">Persistencia</span>
+                </div>
+                <div class="slide-body">
+                    <div class="grid-2">
+                        <div class="card active-border">
+                            <h3>Implementación ORM</h3>
+                            <p>
+                                El mapeo Objeto-Relacional (ORM) se implementa con <strong>Spring Data JPA</strong> e <strong>Hibernate</strong> sobre <strong>PostgreSQL 15</strong>, proveyendo independencia y total portabilidad de datos.
+                            </p>
+                            <ul style="margin-top: 0.8rem;">
+                                <li><strong>HikariCP Connection Pool:</strong> Pool de alto rendimiento embebido en Spring Boot para gestionar colas de consultas concurrentes eficientemente.</li>
+                                <li><strong>Repository Pattern:</strong> interfaces extendidas de <code>JpaRepository</code> que encapsulan las operaciones CRUD y query methods avanzados.</li>
+                                <li><strong>Optimización Transaccional:</strong> Uso de anotaciones <code>@Transactional</code> en la capa de servicios para asegurar la atomicidad de las operaciones de negocio.</li>
+                            </ul>
+                        </div>
+                        <div class="card light-border">
+                            <h3>Parámetros del Pool & Dialecto SQL</h3>
+                            <pre><code># application.properties (ms-usuarios)
+spring.datasource.url=${DB_URL}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# Configuración Hikari Pool
+spring.datasource.hikari.maximum-pool-size=10
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.connection-timeout=20000
+
+# Dialecto PostgreSQL e Hibernate
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide-footer">
+                    <span class="logo-span">Donat<span>ón</span></span>
+                    <span>Diapositiva 3 de 8</span>
+                </div>
+            </div>
+
+            <!-- DIAPOSITIVA 4: ENTIDADES JPA -->
+            <div class="slide">
+                <div class="slide-header">
+                    <h2>Modelado y Relaciones de Datos</h2>
+                    <span class="slide-tag">Modelado</span>
+                </div>
+                <div class="slide-body">
+                    <div class="grid-2">
+                        <div class="card active-border">
+                            <h3>Declaración de Modelos JPA</h3>
+                            <p>
+                                Las clases modelo Java mapean su lógica estructural a esquemas relacionales a través de anotaciones de Jakarta Persistence:
+                            </p>
+                            <ul style="margin-top: 0.8rem;">
+                                <li><code>@Entity</code> & <code>@Table</code>: Declara la correspondencia de la clase con una tabla específica de PostgreSQL.</li>
+                                <li><code>@ManyToOne</code> / <code>@JoinColumn</code>: Vincula objetos lógicos (e.g. donaciones y usuarios) creando llaves foráneas automáticas.</li>
+                                <li><code>@Enumerated(EnumType.STRING)</code>: Guarda estados inmutables como cadenas en base de datos.</li>
+                                <li><code>@PrePersist</code>: Hook para inyectar marcas temporales en tiempo de ejecución.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <pre><code><span class="annotation">@Entity</span>
+<span class="annotation">@Table</span>(name = <span class="string">"donaciones"</span>)
+<span class="keyword">public class</span> <span class="type">Donacion</span> {
+    <span class="annotation">@Id</span>
+    <span class="annotation">@GeneratedValue</span>(strategy = <span class="type">GenerationType.IDENTITY</span>)
+    <span class="keyword">private</span> <span class="type">Long</span> id;
+
+    <span class="annotation">@ManyToOne</span>
+    <span class="annotation">@JoinColumn</span>(name = <span class="string">"donante_id"</span>, nullable = <span class="keyword">false</span>)
+    <span class="keyword">private</span> <span class="type">Usuario</span> donante;
+
+    <span class="annotation">@Enumerated</span>(<span class="type">EnumType.STRING</span>)
+    <span class="keyword">private</span> <span class="type">EstadoDonacion</span> estado;
+
+    <span class="annotation">@Column</span>(name = <span class="string">"fecha_creacion"</span>)
+    <span class="keyword">private</span> <span class="type">LocalDateTime</span> fechaCreacion;
+
+    <span class="annotation">@PrePersist</span>
+    <span class="keyword">protected void</span> <span class="type">onCreate</span>() { fechaCreacion = <span class="type">LocalDateTime.now</span>(); }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide-footer">
+                    <span class="logo-span">Donat<span>ón</span></span>
+                    <span>Diapositiva 4 de 8</span>
+                </div>
+            </div>
+
+            <!-- DIAPOSITIVA 5: STORED PROCEDURES & NATIVE SQL -->
+            <div class="slide">
+                <div class="slide-header">
+                    <h2>Procedimientos Almacenados y Triggers</h2>
+                    <span class="slide-tag">PL/SQL</span>
+                </div>
+                <div class="slide-body">
+                    <div class="grid-2">
+                        <div class="card active-border">
+                            <h3>Optimización de Operaciones Masivas</h3>
+                            <p>
+                                Para operaciones que exigen alto volumen transaccional o lógica restringida a la base de datos, el backend integra procedimientos almacenados y consultas nativas de PostgreSQL:
+                            </p>
+                            <ul style="margin-top: 0.8rem;">
+                                <li><strong>@Procedure:</strong> Permite invocar procedimientos PostgreSQL declarados directamente desde el repositorio JPA, mapeando parámetros automáticos con <code>@Param</code>.</li>
+                                <li><strong>@Query(nativeQuery = true):</strong> Ejecución directa de consultas SQL optimizadas sobre PostgreSQL, útil para funciones espaciales, de matching, de logs o triggers de base de datos.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <pre><code><span class="comment">// Invocación de Stored Procedure en repositorio Java</span>
+<span class="keyword">public interface</span> <span class="type">DonacionRepository</span> 
+       <span class="keyword">extends</span> <span class="type">JpaRepository</span>&lt;<span class="type">Donacion</span>, <span class="type">Long</span>&gt; {
+    
+    <span class="annotation">@Procedure</span>(procedureName = <span class="string">"registrar_donacion_sp"</span>)
+    <span class="type">Boolean</span> <span class="type">registrarDonacionSp</span>(
+        <span class="annotation">@Param</span>(<span class="string">"p_donante_id"</span>) <span class="type">Long</span> donanteId,
+        <span class="annotation">@Param</span>(<span class="string">"p_descripcion"</span>) <span class="type">String</span> descripcion,
+        <span class="annotation">@Param</span>(<span class="string">"p_cantidad"</span>) <span class="type">Integer</span> cantidad
+    );
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide-footer">
+                    <span class="logo-span">Donat<span>ón</span></span>
+                    <span>Diapositiva 5 de 8</span>
+                </div>
+            </div>
+
+            <!-- DIAPOSITIVA 6: ESTRATEGIA DE TESTING -->
+            <div class="slide">
+                <div class="slide-header">
+                    <h2>Estrategia de Testing Integral</h2>
+                    <span class="slide-tag">Testing</span>
+                </div>
+                <div class="slide-body">
+                    <div class="grid-3">
+                        <div class="card active-border">
+                            <h3>Pruebas Backend (78 Casos)</h3>
+                            <p>
+                                Validación a nivel de API REST mediante <strong>MockMvc</strong> y pruebas de negocio en la capa de servicios con <strong>Mockito</strong>.
+                            </p>
+                            <ul style="margin-top: 0.8rem;">
+                                <li>Simulación de respuestas de base de datos sin persistir físicamente en disco.</li>
+                                <li>Verificación de disparos de eventos asíncronos en RabbitMQ.</li>
+                            </ul>
+                        </div>
+                        <div class="card light-border">
+                            <h3>Pruebas Frontend (39 Casos)</h3>
+                            <p>
+                                Pruebas lógicas en React utilizando el framework reactivo <strong>Vitest</strong> y <strong>React Testing Library</strong>.
+                            </p>
+                            <ul style="margin-top: 0.8rem;">
+                                <li>Validación de componentes aislados (Composite pattern).</li>
+                                <li>Pruebas en interceptores Axios y mapeo de rutas protegidas de seguridad.</li>
+                            </ul>
+                        </div>
+                        <div class="card success-border">
+                            <h3>Resultados Globales</h3>
+                            <div style="text-align: center; margin-top: 0.5rem;">
+                                <div style="font-size: 26pt; font-weight: 800; color: var(--success);">100%</div>
+                                <div style="font-size: 10pt; font-weight: 600; text-transform: uppercase; margin-top: 0.2rem; color: var(--text-primary);">Tasa de Aprobación</div>
+                                <p style="font-size: 9pt; margin-top: 0.5rem; text-align: center;">
+                                    <strong>117 tests pasados</strong> con éxito.<br>
+                                    0 fallos | 0 errores | 0 omitidos
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide-footer">
+                    <span class="logo-span">Donat<span>ón</span></span>
+                    <span>Diapositiva 6 de 8</span>
+                </div>
+            </div>
+
+            <!-- DIAPOSITIVA 7: METRICAS DE COBERTURA -->
+            <div class="slide">
+                <div class="slide-header">
+                    <h2>Reporte de Cobertura de Código</h2>
+                    <span class="slide-tag">Cobertura</span>
+                </div>
+                <div class="slide-body">
+                    <div class="grid-2">
+                        <div class="card active-border">
+                            <h3>Medición con Vitest & V8</h3>
+                            <p>
+                                Se generó un reporte completo de cobertura real en el frontend mediante el motor de instrumentación V8:
+                            </p>
+                            <ul style="margin-top: 0.6rem;">
+                                <li><strong>ProtectedRoute.jsx (Proxy/Guard):</strong> Cobertura perfecta de <strong>100%</strong> en líneas, ramas lógicas y funciones evaluadas.</li>
+                                <li><strong>endpoints.js (BFF API):</strong> Cobertura de <strong>57.14%</strong>, validando la consistencia de URLs de comunicación de negocio.</li>
+                                <li><strong>Componentes Comunes:</strong> Cobertura focalizada en <strong>StatusBadge</strong> para renderizados de estados.</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Gráficos Circulares de Cobertura SVG -->
+                        <div class="circle-charts">
+                            <div class="circle-chart-item">
+                                <svg class="circle-svg">
+                                    <circle class="circle-bg" cx="65" cy="65" r="60"></circle>
+                                    <circle class="circle-progress p-100" cx="65" cy="65" r="60"></circle>
+                                </svg>
+                                <div class="circle-text">100%</div>
+                                <div class="circle-label">Seguridad</div>
+                            </div>
+                            <div class="circle-chart-item">
+                                <svg class="circle-svg">
+                                    <circle class="circle-bg" cx="65" cy="65" r="60"></circle>
+                                    <circle class="circle-progress p-43" cx="65" cy="65" r="60"></circle>
+                                </svg>
+                                <div class="circle-text">43%</div>
+                                <div class="circle-label">Líneas Global</div>
+                            </div>
+                            <div class="circle-chart-item">
+                                <svg class="circle-svg">
+                                    <circle class="circle-bg" cx="65" cy="65" r="60"></circle>
+                                    <circle class="circle-progress p-37" cx="65" cy="65" r="60"></circle>
+                                </svg>
+                                <div class="circle-text">37%</div>
+                                <div class="circle-label">Funciones</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide-footer">
+                    <span class="logo-span">Donat<span>ón</span></span>
+                    <span>Diapositiva 7 de 8</span>
+                </div>
+            </div>
+
+            <!-- DIAPOSITIVA 8: CONCLUSIONES Y QA -->
+            <div class="slide">
+                <div class="slide-header">
+                    <h2>Conclusiones y QA Continuo</h2>
+                    <span class="slide-tag">Conclusiones</span>
+                </div>
+                <div class="slide-body">
+                    <div class="grid-2">
+                        <div class="card active-border">
+                            <h3>Principales Beneficios</h3>
+                            <p>
+                                La arquitectura multinivel de pruebas unitarias y de persistencia de Donatón garantiza la estabilidad global y la modularidad del código fuente.
+                            </p>
+                            <ul style="margin-top: 0.6rem;">
+                                <li><strong>Previene Regresiones:</strong> Cambios en la biblioteca común <code>ms-common</code> son validados de manera instantánea por Surefire en el reactor Maven.</li>
+                                <li><strong>Seguridad de Datos:</strong> Mapeo robusto en JPA que encapsula restricciones lógicas a nivel de base de datos sin comprometer la velocidad.</li>
+                            </ul>
+                        </div>
+                        <div class="card light-border">
+                            <h3>Próximos Pasos de Integración</h3>
+                            <p>
+                                Para escalar el control de calidad, se proponen las siguientes acciones en el corto plazo:
+                            </p>
+                            <ul style="margin-top: 0.6rem;">
+                                <li><strong>Automatización CI/CD:</strong> Incorporar el script de PowerShell en Github Actions para validar pruebas y recrear PDFs en cada pull request.</li>
+                                <li><strong>Plugins de Cobertura Backend:</strong> Agregar Jacoco al POM parent de Maven para reportes de cobertura nativos en Java.</li>
+                                <li><strong>Pruebas E2E:</strong> Integrar pruebas funcionales completas con Playwright.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide-footer">
+                    <span class="logo-span">Donat<span>ón</span></span>
+                    <span>Diapositiva 8 de 8</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Controles de pantalla interactivos -->
+        <div class="controls">
+            <button class="control-btn" id="prev-btn">◀</button>
+            <button class="control-btn" id="next-btn">▶</button>
+        </div>
+
+        <!-- Barra de progreso de lectura -->
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const wrapper = document.getElementById('slides-wrapper');
+        const slidesCount = 8;
+        let currentSlide = 0;
+
+        function updateSlide(index) {
+            if (index < 0) index = 0;
+            if (index >= slidesCount) index = slidesCount - 1;
+
+            currentSlide = index;
+            // Desplazamiento horizontal por porcentaje
+            const translateX = -currentSlide * 12.5; // (100 / slidesCount)
+            wrapper.style.transform = `translateX(${translateX}%)`;
+
+            // Actualizar barra de progreso
+            const percent = (currentSlide / (slidesCount - 1)) * 100;
+            document.getElementById('progress-bar').style.width = percent + '%';
+        }
+
+        document.getElementById('prev-btn').onclick = () => {
+            updateSlide(currentSlide - 1);
+        };
+
+        document.getElementById('next-btn').onclick = () => {
+            updateSlide(currentSlide + 1);
+        };
+
+        // Atajos de teclado para presentaciones
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                updateSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft') {
+                updateSlide(currentSlide - 1);
+            }
+        });
+    </script>
+</body>
+</html>

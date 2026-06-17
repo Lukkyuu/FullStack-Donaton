@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donaton - Informe de Persistencia de Datos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #4f46e5;
+            --accent: #0ea5e9;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --border: #e2e8f0;
+            --code-bg: #0f172a;
+            --code-text: #38bdf8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: var(--text-main);
+            line-height: 1.6;
+            font-size: 11pt;
+            padding: 2cm;
+        }
+
+        /* Estilos de impresión y PDF */
+        @page {
+            size: A4;
+            margin: 2cm;
+            @bottom-right {
+                content: counter(page);
+                font-size: 9pt;
+                color: var(--text-light);
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Elementos del Documento */
+        header {
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 1.5rem;
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .logo h1 {
+            font-size: 28pt;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .logo h1 span {
+            color: var(--secondary);
+        }
+
+        .doc-title {
+            text-align: right;
+        }
+
+        .doc-title h2 {
+            font-size: 14pt;
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .doc-title p {
+            font-size: 10pt;
+            color: var(--text-light);
+        }
+
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .metadata-item h4 {
+            font-size: 9pt;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .metadata-item p {
+            font-size: 11pt;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        h2.section-heading {
+            font-size: 18pt;
+            color: var(--primary);
+            border-left: 4px solid var(--secondary);
+            padding-left: 0.75rem;
+            margin: 2.5rem 0 1.25rem 0;
+            font-weight: 700;
+        }
+
+        h3.sub-heading {
+            font-size: 13pt;
+            color: var(--secondary);
+            margin: 1.5rem 0 0.75rem 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 10pt;
+        }
+
+        table th {
+            background-color: var(--primary);
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--primary);
+        }
+
+        table td {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+        }
+
+        table tr:nth-child(even) td {
+            background-color: var(--bg-light);
+        }
+
+        /* Código */
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: var(--bg-light);
+            color: var(--secondary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 9.5pt;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border: 1px solid var(--primary);
+        }
+
+        pre code {
+            background-color: transparent;
+            color: #f8fafc;
+            padding: 0;
+            border-radius: 0;
+            font-size: 9pt;
+            line-height: 1.4;
+            display: block;
+        }
+
+        .keyword { color: #f43f5e; }
+        .type { color: #38bdf8; }
+        .annotation { color: #fbbf24; }
+        .string { color: #34d399; }
+        .comment { color: #64748b; font-style: italic; }
+
+        /* Cajas destacadas */
+        .callout {
+            background: rgba(79, 70, 229, 0.05);
+            border-left: 4px solid var(--secondary);
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .callout-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .callout p:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <div class="logo">
+            <h1>Donat<span>ón</span></h1>
+        </div>
+        <div class="doc-title">
+            <h2>Informe de Persistencia de Datos</h2>
+            <p>Arquitectura, Modelado JPA y Procedimientos Almacenados</p>
+        </div>
+    </header>
+
+    <!-- Metadatos -->
+    <div class="metadata-grid">
+        <div class="metadata-item">
+            <h4>Proyecto</h4>
+            <p>Donatón — Sistema Humanitario</p>
+        </div>
+        <div class="metadata-item">
+            <h4>Componente</h4>
+            <p>Backend (Microservicios Spring Boot)</p>
+        </div>
+        <div class="metadata-item">
+            <h4>Tecnologías</h4>
+            <p>Spring Data JPA, Hibernate, PostgreSQL</p>
+        </div>
+    </div>
+
+    <!-- Sección 1 -->
+    <h2 class="section-heading">1. Arquitectura de Persistencia de Datos</h2>
+    <p>
+        El sistema backend de <strong>Donatón</strong> implementa una arquitectura basada en microservicios, donde cada servicio gestiona su lógica de negocio de manera autónoma. Para asegurar la integridad y la portabilidad del modelo de datos de la plataforma, la capa de persistencia se construye utilizando el estándar industrial <strong>Java Persistence API (JPA)</strong> con <strong>Hibernate</strong> como motor de mapeo objeto-relacional (ORM), conectado a bases de datos relacionales <strong>PostgreSQL</strong>.
+    </p>
+    <p>
+        Los microservicios involucrados en el acceso a datos son:
+    </p>
+    <ul>
+        <li><code>ms-auth</code>: Gestión de credenciales y tokens de acceso.</li>
+        <li><code>ms-donacion</code>: Registro, estados y flujo de donaciones.</li>
+        <li><code>ms-logistica</code>: Centros de acopio, despachos y asignación de recursos.</li>
+        <li><code>ms-necesidad</code>: Publicación y seguimiento de necesidades humanitarias.</li>
+        <li><code>ms-usuarios</code>: Información detallada de perfiles de donantes, organizaciones y administradores.</li>
+        <li><code>ms-matching</code>: Vinculación inteligente entre necesidades y donaciones.</li>
+        <li><code>ms-notificaciones</code>: Historial de alertas y preferencias de usuario.</li>
+    </ul>
+
+    <div class="callout">
+        <div class="callout-title">Patrón Shared Kernel (Módulo ms-common)</div>
+        <p>
+            Para evitar la duplicación de código y garantizar que todos los microservicios manejen definiciones exactas de las entidades y relaciones, se implementó el patrón <strong>Shared Kernel</strong> a través del módulo <code>ms-common</code>. Este subproyecto Maven se compila como una librería compartida y contiene todas las declaraciones de entidades (<code>@Entity</code>), repositorios (<code>JpaRepository</code>), enums y DTOs comunes.
+        </p>
+    </div>
+
+    <!-- Sección 2 -->
+    <div class="page-break"></div>
+    <h2 class="section-heading">2. Modelado de Entidades JPA</h2>
+    <p>
+        Las entidades de Donatón se mapean directamente a tablas relacionales de PostgreSQL utilizando anotaciones estándar de Jakarta Persistence y Lombok para reducir el código boilerplate. A continuación, se detalla la estructura y configuración de persistencia del modelo a través del ejemplo de la entidad <code>Donacion</code>:
+    </p>
+
+    <pre><code><span class="keyword">package</span> com.donaton.backend.donacion.model;
+
+<span class="keyword">import</span> jakarta.persistence.*;
+<span class="keyword">import</span> lombok.*;
+<span class="keyword">import</span> java.time.LocalDateTime;
+<span class="keyword">import</span> com.donaton.backend.auth.model.Usuario;
+<span class="keyword">import</span> com.donaton.backend.logistica.model.CentroAcopio;
+
+<span class="annotation">@Entity</span>
+<span class="annotation">@Table</span>(name = <span class="string">"donaciones"</span>)
+<span class="annotation">@Data</span>
+<span class="annotation">@NoArgsConstructor</span>
+<span class="annotation">@AllArgsConstructor</span>
+<span class="annotation">@Builder</span>
+<span class="keyword">public class</span> <span class="type">Donacion</span> {
+
+    <span class="annotation">@Id</span>
+    <span class="annotation">@GeneratedValue</span>(strategy = <span class="type">GenerationType.IDENTITY</span>)
+    <span class="keyword">private</span> <span class="type">Long</span> id;
+
+    <span class="annotation">@ManyToOne</span>
+    <span class="annotation">@JoinColumn</span>(name = <span class="string">"donante_id"</span>, nullable = <span class="keyword">false</span>)
+    <span class="keyword">private</span> <span class="type">Usuario</span> donante;
+
+    <span class="annotation">@ManyToOne</span>
+    <span class="annotation">@JoinColumn</span>(name = <span class="string">"centro_acopio_id"</span>)
+    <span class="keyword">private</span> <span class="type">CentroAcopio</span> centroAcopio;
+
+    <span class="annotation">@Column</span>(nullable = <span class="keyword">false</span>)
+    <span class="keyword">private</span> <span class="type">String</span> descripcion;
+
+    <span class="keyword">private</span> <span class="type">String</span> categoria;
+    <span class="keyword">private</span> <span class="type">String</span> tipoDonacion;
+    <span class="keyword">private</span> <span class="type">String</span> unidad;
+    <span class="keyword">private</span> <span class="type">String</span> zona;
+
+    <span class="annotation">@Column</span>(name = <span class="string">"necesidad_id"</span>)
+    <span class="keyword">private</span> <span class="type">Long</span> necesidadId;
+
+    <span class="keyword">private</span> <span class="type">Integer</span> cantidad;
+
+    <span class="annotation">@Enumerated</span>(<span class="type">EnumType.STRING</span>)
+    <span class="keyword">private</span> <span class="type">EstadoDonacion</span> estado;
+
+    <span class="annotation">@Column</span>(name = <span class="string">"fecha_creacion"</span>)
+    <span class="keyword">private</span> <span class="type">LocalDateTime</span> fechaCreacion;
+
+    <span class="annotation">@PrePersist</span>
+    <span class="keyword">protected void</span> <span class="type">onCreate</span>() {
+        fechaCreacion = <span class="type">LocalDateTime.now</span>();
+    }
+
+    <span class="keyword">public enum</span> <span class="type">EstadoDonacion</span> {
+        PENDIENTE, EN_PROCESO, ENTREGADA, CANCELADA
+    }
+}</code></pre>
+
+    <h3 class="sub-heading">Detalle del Mapeo Implementado</h3>
+    <ul>
+        <li><strong>Identificadores Autoincrementales:</strong> Se utiliza la estrategia <code>GenerationType.IDENTITY</code> para delegar la creación de llaves primarias en la columna autoincrementable serial de PostgreSQL.</li>
+        <li><strong>Relaciones de Base de Datos:</strong> Se modela la relación <code>@ManyToOne</code> para asociar múltiples registros de donaciones a un único registro de usuario (donante) o centro de acopio, generando automáticamente llaves foráneas consistentes.</li>
+        <li><strong>Enums mapeados a Cadenas:</strong> Para asegurar la legibilidad directa de los datos en la base de datos PostgreSQL, los enums como <code>EstadoDonacion</code> se guardan en formato de texto mediante la anotación <code>@Enumerated(EnumType.STRING)</code>.</li>
+        <li><strong>Eventos de Ciclo de Vida:</strong> Se implementa la anotación <code>@PrePersist</code> mediante el método <code>onCreate()</code>, el cual inyecta la marca de tiempo de creación local en el registro inmediatamente antes de insertarse en la base de datos.</li>
+    </ul>
+
+    <!-- Sección 3 -->
+    <div class="page-break"></div>
+    <h2 class="section-heading">3. Capa de Acceso a Datos: Patrón Repository</h2>
+    <p>
+        El acceso a la base de datos se desacopla completamente de la lógica del servicio mediante el uso del patrón <strong>Repository</strong> de Spring Data JPA. Al extender de la interfaz <code>JpaRepository&lt;T, ID&gt;</code>, el framework inyecta dinámicamente operaciones CRUD estandarizadas (como <code>save()</code>, <code>findById()</code>, <code>findAll()</code> y <code>deleteById()</code>) y provee optimizaciones como paginación y ordenamiento automáticos.
+    </p>
+    <p>
+        Adicionalmente, se configuran métodos de consulta dinámicos basados en la nomenclatura semántica del framework:
+    </p>
+
+    <pre><code><span class="keyword">package</span> com.donaton.backend.donacion.repository;
+
+<span class="keyword">import</span> com.donaton.backend.donacion.model.Donacion;
+<span class="keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;
+<span class="keyword">import</span> java.util.List;
+
+<span class="keyword">public interface</span> <span class="type">DonacionRepository</span> <span class="keyword">extends</span> <span class="type">JpaRepository</span>&lt;<span class="type">Donacion</span>, <span class="type">Long</span>&gt; {
+    <span class="type">List</span>&lt;<span class="type">Donacion</span>&gt; <span class="type">findByDonanteId</span>(<span class="type">Long</span> donanteId);
+    <span class="type">List</span>&lt;<span class="type">Donacion</span>&gt; <span class="type">findByCentroAcopioId</span>(<span class="type">Long</span> centroAcopioId);
+    <span class="type">List</span>&lt;<span class="type">Donacion</span>&gt; <span class="type">findByEstado</span>(<span class="type">Donacion.EstadoDonacion</span> estado);
+}</code></pre>
+
+    <h2 class="section-heading">4. Integración de Procedimientos Almacenados y Triggers</h2>
+    <p>
+        Aunque el estándar arquitectónico de Donatón delega la lógica transaccional de negocio en la capa de servicios de Spring Boot para asegurar la portabilidad e independencia de los microservicios, el sistema está preparado para integrar operaciones intensivas en la base de datos mediante <strong>Procedimientos Almacenados</strong> (Stored Procedures) y <strong>Triggers</strong> nativos de PostgreSQL.
+    </p>
+    
+    <h3 class="sub-heading">4.1 Mapeo de Procedimientos Almacenados mediante @Procedure</h3>
+    <p>
+        Spring Data JPA provee la anotación <code>@Procedure</code> para invocar procedimientos almacenados de base de datos directamente desde el repositorio, mapeando parámetros de entrada y salida a variables Java de manera segura y controlada. 
+    </p>
+    <p>
+        Por ejemplo, supóngase un procedimiento almacenado en PostgreSQL diseñado para procesar y asignar lotes de donaciones acumuladas de forma masiva:
+    </p>
+
+    <pre><code><span class="comment">-- Definición del Stored Procedure en PostgreSQL</span>
+<span class="keyword">CREATE OR REPLACE PROCEDURE</span> registrar_donacion_sp(
+    IN p_donante_id BIGINT,
+    IN p_descripcion VARCHAR,
+    IN p_cantidad INTEGER,
+    OUT p_exito BOOLEAN
+)
+<span class="keyword">LANGUAGE</span> plpgsql AS $$
+<span class="keyword">BEGIN</span>
+    <span class="keyword">INSERT INTO</span> donaciones (donante_id, descripcion, cantidad, estado, fecha_creacion)
+    <span class="keyword">VALUES</span> (p_donante_id, p_descripcion, p_cantidad, 'PENDIENTE', NOW());
+    p_exito := TRUE;
+<span class="keyword">EXCEPTION WHEN OTHERS THEN</span>
+    p_exito := FALSE;
+<span class="keyword">END</span>;
+$$;</code></pre>
+
+    <p>
+        Este procedimiento se puede mapear directamente en la interfaz del repositorio Java de la siguiente manera:
+    </p>
+
+    <pre><code><span class="keyword">public interface</span> <span class="type">DonacionRepository</span> <span class="keyword">extends</span> <span class="type">JpaRepository</span>&lt;<span class="type">Donacion</span>, <span class="type">Long</span>&gt; {
+    
+    <span class="annotation">@Procedure</span>(procedureName = <span class="string">"registrar_donacion_sp"</span>)
+    <span class="type">Boolean</span> <span class="type">registrarDonacionSp</span>(
+        <span class="annotation">@Param</span>(<span class="string">"p_donante_id"</span>) <span class="type">Long</span> donanteId,
+        <span class="annotation">@Param</span>(<span class="string">"p_descripcion"</span>) <span class="type">String</span> descripcion,
+        <span class="annotation">@Param</span>(<span class="string">"p_cantidad"</span>) <span class="type">Integer</span> cantidad
+    );
+}</code></pre>
+
+    <div class="page-break"></div>
+    <h3 class="sub-heading">4.2 Ejecución de Consultas Nativas y Funciones Complejas</h3>
+    <p>
+        Para consultas altamente específicas que requieren operaciones complejas, joins avanzados o llamados de funciones propias de PostgreSQL que no son fácilmente expresables en JPQL, la plataforma utiliza la anotación <code>@Query</code> configurando el parámetro <code>nativeQuery = true</code>.
+    </p>
+    <p>
+        Un ejemplo aplicable al microservicio de logística para calcular la distancia o el balance óptimo entre centros de acopio y donaciones registradas:
+    </p>
+
+    <pre><code><span class="keyword">public interface</span> <span class="type">CentroAcopioRepository</span> <span class="keyword">extends</span> <span class="type">JpaRepository</span>&lt;<span class="type">CentroAcopio</span>, <span class="type">Long</span>&gt; {
+    
+    <span class="annotation">@Query</span>(value = <span class="string">"SELECT c.*, calcular_distancia(c.latitud, c.longitud, :lat, :lon) AS distancia "</span> +
+                   <span class="string">"FROM centros_acopio c WHERE c.activo = true "</span> +
+                   <span class="string">"ORDER BY distancia LIMIT 1"</span>, 
+           nativeQuery = <span class="keyword">true</span>)
+    <span class="type">CentroAcopio</span> <span class="type">buscarCentroMasCercano</span>(
+        <span class="annotation">@Param</span>(<span class="string">"lat"</span>) <span class="type">Double</span> latitud, 
+        <span class="annotation">@Param</span>(<span class="string">"lon"</span>) <span class="type">Double</span> longitud
+    );
+}</code></pre>
+
+    <h2 class="section-heading">5. Pool de Conexiones y Rendimiento</h2>
+    <p>
+        Para asegurar un excelente tiempo de respuesta bajo alta concurrencia, la persistencia utiliza el pool de conexiones <strong>HikariCP</strong>, integrado de manera predeterminada en Spring Boot. La configuración típica en los archivos <code>application.properties</code> de los microservicios encapsula la inyección de credenciales y variables de entorno definidas en contenedores Docker y AWS:
+    </p>
+
+    <pre><code># Configuración típica de base de datos relacional (ms-usuarios)
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME:postgres}
+spring.datasource.password=${DB_PASSWORD:postgres}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# Configuración del Pool HikariCP
+spring.datasource.hikari.maximum-pool-size=10
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.idle-timeout=300000
+spring.datasource.hikari.connection-timeout=20000
+
+# Parámetros adicionales de JPA / Hibernate
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false</code></pre>
+
+    <h3 class="sub-heading">Resumen de Parámetros Clave</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Parámetro</th>
+                <th>Propósito</th>
+                <th>Valor Predeterminado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>maximum-pool-size</code></td>
+                <td>Define el límite máximo de conexiones activas simultáneas a la base de datos PostgreSQL.</td>
+                <td>10 conexiones</td>
+            </tr>
+            <tr>
+                <td><code>connection-timeout</code></td>
+                <td>Tiempo límite de espera en milisegundos para obtener una conexión del pool antes de arrojar un error.</td>
+                <td>20,000 ms (20s)</td>
+            </tr>
+            <tr>
+                <td><code>ddl-auto</code></td>
+                <td>Estrategia de generación y actualización del esquema de base de datos a partir de las anotaciones JPA.</td>
+                <td><code>update</code> (desarrollo) / <code>none</code> (producción)</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

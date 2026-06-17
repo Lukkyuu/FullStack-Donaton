@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donaton - Dashboard de Pruebas Unitarias</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --card-border: rgba(255, 255, 255, 0.06);
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            
+            --color-success: #10b981;
+            --color-success-bg: rgba(16, 185, 129, 0.1);
+            --color-success-border: rgba(16, 185, 129, 0.2);
+            
+            --color-danger: #ef4444;
+            --color-danger-bg: rgba(239, 68, 68, 0.1);
+            --color-danger-border: rgba(239, 68, 68, 0.2);
+            
+            --color-warning: #f59e0b;
+            --color-warning-bg: rgba(245, 158, 11, 0.1);
+            --color-warning-border: rgba(245, 158, 11, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2.5rem 1.5rem;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo-section h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.2rem;
+        }
+
+        .logo-section p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .timestamp-badge {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timestamp-badge::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-primary);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 2.4rem;
+            font-weight: 700;
+        }
+
+        .stat-card.passed { border-left: 4px solid var(--color-success); }
+        .stat-card.failed { border-left: 4px solid var(--color-danger); }
+        .stat-card.skipped { border-left: 4px solid var(--color-warning); }
+        .stat-card.duration { border-left: 4px solid var(--accent-primary); }
+
+        .stat-card.passed .value { color: var(--color-success); }
+        .stat-card.failed .value { color: var(--color-danger); }
+        .stat-card.skipped .value { color: var(--color-warning); }
+
+        /* Services Grid */
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(16px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 140px;
+        }
+
+        .service-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px -10px rgba(0,0,0,0.5);
+        }
+
+        .service-card.active {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .service-card .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .service-card h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .service-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .service-badge.success {
+            background: var(--color-success-bg);
+            color: var(--color-success);
+            border: 1px solid var(--color-success-border);
+        }
+
+        .service-badge.danger {
+            background: var(--color-danger-bg);
+            color: var(--color-danger);
+            border: 1px solid var(--color-danger-border);
+        }
+
+        .service-card .service-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .service-card .bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0.8rem 0;
+        }
+
+        .service-card .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* Filter Controls */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            padding: 0.25rem;
+            border-radius: 12px;
+            gap: 0.25rem;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.5rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-primary);
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+        }
+
+        .search-container {
+            position: relative;
+            min-width: 280px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 0.6rem 1rem 0.6rem 2.2rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
+        }
+
+        .search-container::before {
+            content: '🔍';
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            opacity: 0.5;
+        }
+
+        /* Detail List */
+        .classes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .class-accordion {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            transition: all 0.3s ease;
+        }
+
+        .class-header {
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+
+        .class-header:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .class-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .class-status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .class-status-dot.success {
+            background-color: var(--color-success);
+            box-shadow: 0 0 8px var(--color-success);
+        }
+
+        .class-status-dot.danger {
+            background-color: var(--color-danger);
+            box-shadow: 0 0 8px var(--color-danger);
+        }
+
+        .class-title-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .class-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .class-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.15rem;
+        }
+
+        .class-summary {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .arrow-icon {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+            opacity: 0.6;
+        }
+
+        .class-accordion.open .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .class-content {
+            border-top: 1px solid var(--card-border);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+        }
+
+        .class-accordion.open .class-content {
+            max-height: 2000px;
+            transition: max-height 0.4s cubic-bezier(1, 0, 1, 0);
+        }
+
+        .cases-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cases-table tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: background 0.15s ease;
+        }
+
+        .cases-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .cases-table tr:hover {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .cases-table td {
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        .case-name {
+            font-weight: 500;
+            font-family: monospace;
+            font-size: 0.88rem;
+        }
+
+        .case-duration {
+            text-align: right;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .case-badge-cell {
+            width: 120px;
+            text-align: right;
+        }
+
+        .case-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .case-badge.success {
+            background: rgba(16, 185, 129, 0.08);
+            color: var(--color-success);
+        }
+
+        .case-badge.failed {
+            background: rgba(239, 68, 68, 0.08);
+            color: var(--color-danger);
+        }
+
+        .case-badge.skipped {
+            background: rgba(245, 158, 11, 0.08);
+            color: var(--color-warning);
+        }
+
+        /* Failure message block */
+        .failure-message-row {
+            background: rgba(239, 68, 68, 0.02);
+        }
+
+        .failure-message-cell {
+            padding: 0 1.5rem 1.2rem 1.5rem !important;
+        }
+
+        .failure-block {
+            background: #0d1117;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #ff7b72;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            max-height: 250px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-container {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-section">
+                <h1>Donaton</h1>
+                <p>Dashboard de Resultados de Pruebas Unitarias de Microservicios</p>
+            </div>
+            <div class="timestamp-badge" id="generation-time">Generado ahora</div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card passed">
+                <div class="label">Pruebas Exitosas</div>
+                <div class="value" id="stat-passed">0</div>
+            </div>
+            <div class="stat-card failed">
+                <div class="label">Pruebas Fallidas</div>
+                <div class="value" id="stat-failed">0</div>
+            </div>
+            <div class="stat-card skipped">
+                <div class="label">Pruebas Omitidas</div>
+                <div class="value" id="stat-skipped">0</div>
+            </div>
+            <div class="stat-card duration">
+                <div class="label">Tiempo Total</div>
+                <div class="value" id="stat-duration">0.00s</div>
+            </div>
+        </div>
+
+        <!-- Microservices Grid -->
+        <h2 class="section-title">📦 Microservicios del Backend</h2>
+        <div class="services-grid" id="services-container">
+            <!-- Services cards rendered by JS -->
+        </div>
+
+        <!-- Details Header & Filters -->
+        <div class="controls-bar">
+            <h2 class="section-title">🔍 Detalle de Casos de Prueba</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="setFilter('ALL', this)">Todas</button>
+                <button class="filter-btn" onclick="setFilter('PASSED', this)">Pasadas</button>
+                <button class="filter-btn" onclick="setFilter('FAILED', this)">Falladas</button>
+            </div>
+            <div class="search-container">
+                <input type="text" class="search-input" id="search-input" oninput="handleSearch()" placeholder="Buscar por clase o método...">
+            </div>
+        </div>
+
+        <!-- Accordions List -->
+        <div class="classes-list" id="classes-container">
+            <!-- Test suites rendered by JS -->
+        </div>
+    </div>
+
+    <script>
+        // Datos de las pruebas
+        const rawTestData = @JSON_DATA@;
+
+        let activeService = null;
+        let activeFilter = 'ALL';
+        let searchQuery = '';
+
+        // Formatear fecha de generación al cargar
+        document.getElementById('generation-time').innerText = 'Generado el ' + new Date().toLocaleString();
+
+        // Calcular Métricas Generales
+        let totalPassed = 0;
+        let totalFailed = 0;
+        let totalSkipped = 0;
+        let totalDuration = 0;
+
+        rawTestData.forEach(suite => {
+            totalDuration += suite.duration;
+            suite.cases.forEach(c => {
+                if (c.status === 'PASSED') totalPassed++;
+                else if (c.status === 'FAILED' || c.status === 'ERROR') totalFailed++;
+                else if (c.status === 'SKIPPED') totalSkipped++;
+            });
+        });
+
+        document.getElementById('stat-passed').innerText = totalPassed;
+        document.getElementById('stat-failed').innerText = totalFailed;
+        document.getElementById('stat-skipped').innerText = totalSkipped;
+        document.getElementById('stat-duration').innerText = totalDuration.toFixed(3) + 's';
+
+        // Procesar información de servicios
+        const servicesMap = {};
+        rawTestData.forEach(suite => {
+            const mod = suite.module;
+            if (!servicesMap[mod]) {
+                servicesMap[mod] = { name: mod, passed: 0, failed: 0, skipped: 0, duration: 0 };
+            }
+            servicesMap[mod].duration += suite.duration;
+            suite.cases.forEach(c => {
+                if (c.status === 'PASSED') servicesMap[mod].passed++;
+                else if (c.status === 'FAILED' || c.status === 'ERROR') servicesMap[mod].failed++;
+                else if (c.status === 'SKIPPED') servicesMap[mod].skipped++;
+            });
+        });
+
+        // Renderizar Tarjetas de Servicio
+        const servicesContainer = document.getElementById('services-container');
+        Object.values(servicesMap).forEach(service => {
+            const card = document.createElement('div');
+            card.className = 'service-card';
+            card.id = `card-${service.name}`;
+            card.onclick = () => toggleServiceFilter(service.name);
+
+            const total = service.passed + service.failed + service.skipped;
+            const successRate = total > 0 ? (service.passed / total * 100) : 0;
+            const isSuccess = service.failed === 0;
+
+            const badgeClass = isSuccess ? 'success' : 'danger';
+            const badgeText = isSuccess ? 'OK' : 'Error';
+            const barFillColor = isSuccess ? 'var(--color-success)' : 'var(--color-danger)';
+
+            card.innerHTML = `
+                <div class="service-header">
+                    <h3>${service.name}</h3>
+                    <span class="service-badge ${badgeClass}">${badgeText}</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: ${successRate}%; background: ${barFillColor}"></div>
+                </div>
+                <div class="service-stats">
+                    <span>${service.passed}/${total} pasadas</span>
+                    <span>${service.duration.toFixed(2)}s</span>
+                </div>
+            `;
+            servicesContainer.appendChild(card);
+        });
+
+        // Filtrado
+        function toggleServiceFilter(serviceName) {
+            const card = document.getElementById(`card-${serviceName}`);
+            
+            if (activeService === serviceName) {
+                activeService = null;
+                card.classList.remove('active');
+            } else {
+                if (activeService) {
+                    document.getElementById(`card-${activeService}`).classList.remove('active');
+                }
+                activeService = serviceName;
+                card.classList.add('active');
+            }
+            renderDetails();
+        }
+
+        function setFilter(filterType, element) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            activeFilter = filterType;
+            renderDetails();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('search-input').value.toLowerCase();
+            renderDetails();
+        }
+
+        // Renderizar lista detallada
+        function renderDetails() {
+            const container = document.getElementById('classes-container');
+            container.innerHTML = '';
+
+            let filteredSuitesCount = 0;
+
+            rawTestData.forEach(suite => {
+                // Filtrar por servicio activo
+                if (activeService && suite.module !== activeService) return;
+
+                // Filtrar casos según estado y consulta de búsqueda
+                const matchedCases = suite.cases.filter(c => {
+                    const matchesFilter = 
+                        activeFilter === 'ALL' ||
+                        (activeFilter === 'PASSED' && c.status === 'PASSED') ||
+                        (activeFilter === 'FAILED' && (c.status === 'FAILED' || c.status === 'ERROR'));
+
+                    const matchesSearch = 
+                        c.name.toLowerCase().includes(searchQuery) || 
+                        suite.className.toLowerCase().includes(searchQuery);
+
+                    return matchesFilter && matchesSearch;
+                });
+
+                if (matchedCases.length === 0) return;
+                filteredSuitesCount++;
+
+                const accordion = document.createElement('div');
+                const isSuiteSuccess = suite.failuresCount === 0 && suite.errorsCount === 0;
+                accordion.className = `class-accordion ${isSuiteSuccess ? 'success' : 'danger'}`;
+
+                // Formatear nombre de la clase simplificado
+                const classParts = suite.className.split('.');
+                const simpleClassName = classParts[classParts.length - 1];
+
+                const totalInSuite = suite.testsCount;
+                const passedInSuite = totalInSuite - suite.failuresCount - suite.errorsCount - suite.skippedCount;
+
+                accordion.innerHTML = `
+                    <div class="class-header" onclick="this.parentElement.classList.toggle('open')">
+                        <div class="class-info">
+                            <div class="class-status-dot ${isSuiteSuccess ? 'success' : 'danger'}"></div>
+                            <div class="class-title-wrapper">
+                                <span class="class-title">${simpleClassName}</span>
+                                <span class="class-subtitle">${suite.className} • Módulo: ${suite.module}</span>
+                            </div>
+                        </div>
+                        <div class="class-summary">
+                            <span>${passedInSuite}/${totalInSuite} pasados</span>
+                            <span>${suite.duration.toFixed(3)}s</span>
+                            <span class="arrow-icon">▼</span>
+                        </div>
+                    </div>
+                    <div class="class-content">
+                        <table class="cases-table">
+                            <tbody id="cases-body-${suite.className.replace(/\./g, '_')}"></tbody>
+                        </table>
+                    </div>
+                `;
+
+                container.appendChild(accordion);
+
+                const tableBody = document.getElementById(`cases-body-${suite.className.replace(/\./g, '_')}`);
+                
+                matchedCases.forEach(c => {
+                    const row = document.createElement('tr');
+                    const badgeClass = c.status.toLowerCase();
+                    const badgeText = c.status;
+
+                    row.innerHTML = `
+                        <td class="case-name">${c.name}</td>
+                        <td class="case-duration">${c.time.toFixed(3)}s</td>
+                        <td class="case-badge-cell">
+                            <span class="case-badge ${badgeClass}">${badgeText}</span>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+
+                    // Si falló, renderizar bloque de error
+                    if (c.status === 'FAILED' || c.status === 'ERROR') {
+                        const errorRow = document.createElement('tr');
+                        errorRow.className = 'failure-message-row';
+                        errorRow.innerHTML = `
+                            <td colspan="3" class="failure-message-cell">
+                                <pre class="failure-block">${c.message || 'Sin mensaje de error disponible.'}</pre>
+                            </td>
+                        `;
+                        tableBody.appendChild(errorRow);
+                    }
+                });
+            });
+
+            if (filteredSuitesCount === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No se encontraron resultados</h3>
+                        <p>Intenta ajustar los filtros o el texto de búsqueda.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Renderizado inicial
+        renderDetails();
+    </script>
+</body>
+</html>

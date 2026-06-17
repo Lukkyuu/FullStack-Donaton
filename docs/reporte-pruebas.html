@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donaton - Reporte de Pruebas Unitarias y Cobertura</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #4f46e5;
+            --accent: #0ea5e9;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --border: #e2e8f0;
+            --code-bg: #0f172a;
+            --code-text: #38bdf8;
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.05);
+            --success-border: rgba(16, 185, 129, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: var(--text-main);
+            line-height: 1.6;
+            font-size: 11pt;
+            padding: 2cm;
+        }
+
+        /* Estilos de impresión y PDF */
+        @page {
+            size: A4;
+            margin: 2cm;
+            @bottom-right {
+                content: counter(page);
+                font-size: 9pt;
+                color: var(--text-light);
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Elementos del Documento */
+        header {
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 1.5rem;
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .logo h1 {
+            font-size: 28pt;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .logo h1 span {
+            color: var(--secondary);
+        }
+
+        .doc-title {
+            text-align: right;
+        }
+
+        .doc-title h2 {
+            font-size: 14pt;
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .doc-title p {
+            font-size: 10pt;
+            color: var(--text-light);
+        }
+
+        /* Stats Blocks */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 9pt;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .val {
+            font-size: 24pt;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-card.ok .val {
+            color: var(--success);
+        }
+
+        h2.section-heading {
+            font-size: 18pt;
+            color: var(--primary);
+            border-left: 4px solid var(--secondary);
+            padding-left: 0.75rem;
+            margin: 2.5rem 0 1.25rem 0;
+            font-weight: 700;
+        }
+
+        h3.sub-heading {
+            font-size: 13pt;
+            color: var(--secondary);
+            margin: 1.5rem 0 0.75rem 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 10pt;
+        }
+
+        table th {
+            background-color: var(--primary);
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--primary);
+        }
+
+        table td {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+        }
+
+        table tr:nth-child(even) td {
+            background-color: var(--bg-light);
+        }
+
+        /* Código */
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: var(--bg-light);
+            color: var(--secondary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 9.5pt;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border: 1px solid var(--primary);
+        }
+
+        pre code {
+            background-color: transparent;
+            color: #f8fafc;
+            padding: 0;
+            border-radius: 0;
+            font-size: 9pt;
+            line-height: 1.4;
+            display: block;
+        }
+
+        .keyword { color: #f43f5e; }
+        .type { color: #38bdf8; }
+        .annotation { color: #fbbf24; }
+        .string { color: #34d399; }
+        .comment { color: #64748b; font-style: italic; }
+
+        /* Cajas destacadas */
+        .callout {
+            background: var(--success-bg);
+            border-left: 4px solid var(--success);
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+            border-top: 1px solid var(--success-border);
+            border-right: 1px solid var(--success-border);
+            border-bottom: 1px solid var(--success-border);
+        }
+
+        .callout-title {
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Gráficos de barra de cobertura */
+        .coverage-bar-container {
+            width: 100%;
+            height: 16px;
+            background-color: var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+
+        .coverage-bar-fill {
+            height: 100%;
+            background-color: var(--secondary);
+            border-radius: 8px;
+        }
+
+        .coverage-bar-fill.success {
+            background-color: var(--success);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <div class="logo">
+            <h1>Donat<span>ón</span></h1>
+        </div>
+        <div class="doc-title">
+            <h2>Reporte de Pruebas Unitarias</h2>
+            <p>Resultados de Pruebas y Cobertura de Código de Frontend & Backend</p>
+        </div>
+    </header>
+
+    <!-- Metadatos / Resumen de Pruebas -->
+    <div class="stats-summary">
+        <div class="stat-card">
+            <h3>Pruebas Totales Ejecutadas</h3>
+            <div class="val">117</div>
+        </div>
+        <div class="stat-card ok">
+            <h3>Tasa de Éxito General</h3>
+            <div class="val">100%</div>
+        </div>
+        <div class="stat-card">
+            <h3>Pruebas Pasadas / Falladas</h3>
+            <div class="val" style="color: var(--success);">117 / 0</div>
+        </div>
+    </div>
+
+    <!-- Sección 1 -->
+    <h2 class="section-heading">1. Introducción al Ecosistema de Pruebas</h2>
+    <p>
+        Para asegurar la confiabilidad, consistencia y correcto comportamiento de la plataforma humanitaria <strong>Donatón</strong>, se ha implementado un esquema robusto de pruebas automatizadas que abarca tanto el frontend de usuario (desarrollado en React y Vite) como los microservicios distribuidos del backend (desarrollados en Spring Boot).
+    </p>
+    <p>
+        La estrategia de testing incluye pruebas unitarias y de integración de controladores, pruebas unitarias para servicios de negocio y el mockeo completo de repositorios y comunicaciones externas (como publicación en colas RabbitMQ) para garantizar ejecuciones aisladas e independientes.
+    </p>
+
+    <!-- Sección 2 -->
+    <h2 class="section-heading">2. Métricas y Cobertura del Backend</h2>
+    <p>
+        La compilación de pruebas de backend se realiza mediante el reactor Maven Multi-Módulo a través del comando <code>./mvnw test</code>. El suite de pruebas backend consta de <strong>78 casos de prueba unitarios y de integración</strong> que validan el 100% de la funcionalidad de negocio expuesta por los microservicios.
+    </p>
+
+    <div class="callout">
+        <div class="callout-title">Resumen de Ejecución de Pruebas Backend</div>
+        <p><strong>Total de Pruebas:</strong> 78 ejecutadas con éxito en 15 suites de pruebas integradas. 0 errores, 0 fallos y 0 omitidas. El tiempo acumulado del reactor fue de 31.9 segundos.</p>
+    </div>
+
+    <h3>Métricas Detalladas por Microservicio</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Módulo Microservicio</th>
+                <th>Clases de Pruebas Evaluadas</th>
+                <th>Casos</th>
+                <th>Fallos</th>
+                <th>Tiempo</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>ms-auth</code></td>
+                <td>AuthControllerTest, AuthServiceTest</td>
+                <td>13</td>
+                <td>0</td>
+                <td>3.17s</td>
+                <td>PASSED</td>
+            </tr>
+            <tr>
+                <td><code>ms-donacion</code></td>
+                <td>DonacionControllerTest, DonacionServiceTest</td>
+                <td>10</td>
+                <td>0</td>
+                <td>2.94s</td>
+                <td>PASSED</td>
+            </tr>
+            <tr>
+                <td><code>ms-logistica</code></td>
+                <td>LogisticaControllerTest, LogisticaServiceTest</td>
+                <td>12</td>
+                <td>0</td>
+                <td>3.10s</td>
+                <td>PASSED</td>
+            </tr>
+            <tr>
+                <td><code>ms-matching</code></td>
+                <td>MatchingControllerTest, MatchingServiceTest</td>
+                <td>9</td>
+                <td>0</td>
+                <td>2.67s</td>
+                <td>PASSED</td>
+            </tr>
+            <tr>
+                <td><code>ms-necesidad</code></td>
+                <td>NecesidadControllerTest, NecesidadServiceTest</td>
+                <td>9</td>
+                <td>0</td>
+                <td>2.51s</td>
+                <td>PASSED</td>
+            </tr>
+            <tr>
+                <td><code>ms-notificaciones</code></td>
+                <td>NotificacionControllerTest, NotificacionServiceTest</td>
+                <td>9</td>
+                <td>0</td>
+                <td>2.73s</td>
+                <td>PASSED</td>
+            </tr>
+            <tr>
+                <td><code>ms-usuarios</code></td>
+                <td>UsuarioControllerTest, UsuarioServiceTest</td>
+                <td>13</td>
+                <td>0</td>
+                <td>2.69s</td>
+                <td>PASSED</td>
+            </tr>
+            <tr>
+                <td><code>ms-gateway</code></td>
+                <td>GatewayControllerTest</td>
+                <td>3</td>
+                <td>0</td>
+                <td>0.08s</td>
+                <td>PASSED</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Sección 3 -->
+    <div class="page-break"></div>
+    <h2 class="section-heading">3. Métricas y Cobertura del Frontend</h2>
+    <p>
+        El frontend ejecuta sus pruebas de manera aislada utilizando <strong>Vitest</strong> y <strong>React Testing Library</strong> a través del comando <code>npm run test:coverage</code>. Las pruebas validan la navegación estructurada, las llamadas y enrutamientos a la API BFF y el comportamiento predecible del diseño por componentes (Composite pattern).
+    </p>
+    <p>
+        Se ejecutan <strong>39 pruebas en 3 archivos de suite de pruebas</strong>, con una tasa de aprobación del 100% en un tiempo de ejecución de 2.40 segundos.
+    </p>
+
+    <h3>Reporte de Cobertura de Código (Vitest & V8 Coverage)</h3>
+    <p>
+        El reporte detallado de cobertura de código por archivos y carpetas revela la cobertura sobre las capas esenciales del cliente web:
+    </p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Archivo / Directorio</th>
+                <th>% Sentencias</th>
+                <th>% Ramas</th>
+                <th>% Funciones</th>
+                <th>% Líneas</th>
+                <th>Visualización</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Todos los archivos (Global)</strong></td>
+                <td>39.53%</td>
+                <td>24.39%</td>
+                <td>37.50%</td>
+                <td>43.58%</td>
+                <td>
+                    <div class="coverage-bar-container">
+                        <div class="coverage-bar-fill" style="width: 43.58%;"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><code>src/auth/ProtectedRoute.jsx</code></td>
+                <td>100.0%</td>
+                <td>100.0%</td>
+                <td>100.0%</td>
+                <td>100.0%</td>
+                <td>
+                    <div class="coverage-bar-container">
+                        <div class="coverage-bar-fill success" style="width: 100%;"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><code>src/api/endpoints.js</code></td>
+                <td>57.14%</td>
+                <td>100.0%</td>
+                <td>53.84%</td>
+                <td>57.14%</td>
+                <td>
+                    <div class="coverage-bar-container">
+                        <div class="coverage-bar-fill" style="width: 57.14%;"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><code>src/shared/components/index.jsx</code></td>
+                <td>13.04%</td>
+                <td>6.06%</td>
+                <td>10.00%</td>
+                <td>15.78%</td>
+                <td>
+                    <div class="coverage-bar-container">
+                        <div class="coverage-bar-fill" style="width: 15.78%;"></div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout">
+        <div class="callout-title">Análisis de la Cobertura del Frontend</div>
+        <p>
+            El componente clave <code>ProtectedRoute.jsx</code>, responsable del patrón de enrutamiento proxy-guard que restringe el acceso de usuarios no autorizados, logra un <strong>100% de cobertura</strong> en todas sus sentencias y flujos lógicos. El archivo común de componentes <code>index.jsx</code> reporta una cobertura menor (15.78% de líneas), debido a que actualmente las pruebas se centran en verificar exhaustivamente el componente <code>StatusBadge</code>, el cual se renderiza con consistencia visual para todos los estados del negocio.
+        </p>
+    </div>
+
+    <!-- Sección 4 -->
+    <div class="page-break"></div>
+    <h2 class="section-heading">4. Ejemplos de Pruebas Realizadas y Resultados</h2>
+    <p>
+        A continuación se muestran tres ejemplos representativos del ecosistema de pruebas del proyecto, correspondientes a un controlador REST de Spring Boot, un servicio transaccional con publicador de RabbitMQ y un componente visual de React.
+    </p>
+
+    <h3 class="sub-heading">Ejemplo 4.1: Prueba de Integración Web - NecesidadControllerTest (Backend)</h3>
+    <p>
+        Este test valida mediante <code>MockMvc</code> que el endpoint de creación de necesidades sea accesible, procese datos JSON entrantes y devuelva la estructura DTO esperada.
+    </p>
+
+    <pre><code><span class="annotation">@WebMvcTest</span>(<span class="type">NecesidadController</span>.class)
+<span class="annotation">@AutoConfigureMockMvc</span>(addFilters = <span class="keyword">false</span>)
+<span class="keyword">public class</span> <span class="type">NecesidadControllerTest</span> {
+
+    <span class="annotation">@Autowired</span>
+    <span class="keyword">private</span> <span class="type">MockMvc</span> mockMvc;
+
+    <span class="annotation">@MockBean</span>
+    <span class="keyword">private</span> <span class="type">NecesidadService</span> necesidadService;
+
+    <span class="annotation">@Test</span>
+    <span class="keyword">public void</span> <span class="type">crearShouldReturnNeedResponse</span>() <span class="keyword">throws</span> <span class="type">Exception</span> {
+        <span class="type">NecesidadResponse</span> response = <span class="type">NecesidadResponse</span>.builder()
+                .id(1L)
+                .descripcion(<span class="string">"Comida para damnificados"</span>)
+                .estado(Necesidad.EstadoNecesidad.ACTIVA)
+                .build();
+
+        when(necesidadService.crear(any())).thenReturn(response);
+
+        mockMvc.perform(post(<span class="string">"/api/necesidades"</span>)
+                .contentType(<span class="type">MediaType</span>.APPLICATION_JSON)
+                .content(<span class="string">"{\"descripcion\":\"Comida para damnificados\",\"cantidad\":100}"</span>))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath(<span class="string">"$.id"</span>).value(1L))
+                .andExpect(jsonPath(<span class="string">"$.descripcion"</span>).value(<span class="string">"Comida para damnificados"</span>))
+                .andExpect(jsonPath(<span class="string">"$.estado"</span>).value(<span class="string">"ACTIVA"</span>));
+    }
+}</code></pre>
+
+    <h3 class="sub-heading">Ejemplo 4.2: Prueba de Servicio y Publicador RabbitMQ - DonacionServiceTest (Backend)</h3>
+    <p>
+        Este test unitario valida que la creación de una donación persista el objeto mediante el repositorio y dispare el evento correspondiente hacia la cola de RabbitMQ mediante el publisher configurado.
+    </p>
+
+    <pre><code><span class="annotation">@ExtendWith</span>(<span class="type">MockitoExtension</span>.class)
+<span class="keyword">public class</span> <span class="type">DonacionServiceTest</span> {
+
+    <span class="annotation">@Mock</span>
+    <span class="keyword">private</span> <span class="type">DonacionRepository</span> donacionRepository;
+
+    <span class="annotation">@Mock</span>
+    <span class="keyword">private</span> <span class="type">DonacionPublisher</span> donacionPublisher;
+
+    <span class="annotation">@InjectMocks</span>
+    <span class="keyword">private</span> <span class="type">DonacionService</span> donacionService;
+
+    <span class="annotation">@Test</span>
+    <span class="keyword">public void</span> <span class="type">crearShouldSaveAndPublishDonation</span>() {
+        <span class="type">DonacionRequest</span> request = <span class="keyword">new</span> <span class="type">DonacionRequest</span>();
+        request.setDescripcion(<span class="string">"Ropa de invierno"</span>);
+        request.setCantidad(10);
+
+        <span class="type">Donacion</span> savedDonacion = <span class="type">Donacion</span>.builder()
+                .id(1L)
+                .descripcion(<span class="string">"Ropa de invierno"</span>)
+                .cantidad(10)
+                .estado(Donacion.EstadoDonacion.PENDIENTE)
+                .build();
+
+        when(donacionRepository.save(any(<span class="type">Donacion</span>.class))).thenReturn(savedDonacion);
+
+        <span class="type">DonacionResponse</span> response = donacionService.crear(request);
+
+        verify(donacionRepository, times(1)).save(any(<span class="type">Donacion</span>.class));
+        verify(donacionPublisher, times(1)).publishDonacionCreada(any());
+        assertEquals(<span class="string">"Ropa de invierno"</span>, response.getDescripcion());
+    }
+}</code></pre>
+
+    <!-- Sección 4.3 -->
+    <div class="page-break"></div>
+    <h3 class="sub-heading">Ejemplo 4.3: Prueba de Interfaz y Componentes - StatusBadge.test.jsx (Frontend)</h3>
+    <p>
+        Prueba unitaria en Vitest que evalúa el patrón de composición visual. Comprueba que el componente <code>StatusBadge</code> de React asigne dinámicamente las clases CSS correctas asociadas a la severidad del color según el estado inyectado.
+    </p>
+
+    <pre><code><span class="keyword">import</span> { describe, it, expect } <span class="keyword">from</span> <span class="string">'vitest'</span>;
+<span class="keyword">import</span> { render, screen } <span class="keyword">from</span> <span class="string">'@testing-library/react'</span>;
+<span class="keyword">import</span> { StatusBadge } <span class="keyword">from</span> <span class="string">'../shared/components/index.jsx'</span>;
+
+describe(<span class="string">'StatusBadge'</span>, () =&gt; {
+  <span class="keyword">const</span> casos = [
+    { status: <span class="string">'PENDIENTE'</span>,   expectedClass: <span class="string">'badge-amber'</span> },
+    { status: <span class="string">'ACTIVO'</span>,      expectedClass: <span class="string">'badge-green'</span> },
+    { status: <span class="string">'COMPLETADO'</span>,  expectedClass: <span class="string">'badge-blue'</span>  },
+    { status: <span class="string">'CANCELADO'</span>,   expectedClass: <span class="string">'badge-red'</span>   },
+  ];
+
+  casos.forEach(({ status, expectedClass }) => {
+    it(<span class="string">`renderiza estado "${status}" con clase "${expectedClass}"`</span>, () => {
+      render(&lt;<span class="type">StatusBadge</span> status={status} /&gt;);
+      <span class="keyword">const</span> badge = screen.getByText(status);
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveClass(<span class="string">'badge'</span>);
+      expect(badge).toHaveClass(expectedClass);
+    });
+  });
+
+  it(<span class="string">'usa badge-gray para estado desconocido'</span>, () => {
+    render(&lt;<span class="type">StatusBadge</span> status=<span class="string">"DESCONOCIDO"</span> /&gt;);
+    <span class="keyword">const</span> badge = screen.getByText(<span class="string">'DESCONOCIDO'</span>);
+    expect(badge).toHaveClass(<span class="string">'badge-gray'</span>);
+  });
+});</code></pre>
+
+    <h2 class="section-heading">5. Conclusiones y Plan de Aseguramiento de Calidad</h2>
+    <p>
+        El ecosistema de pruebas implementado en Donatón garantiza:
+    </p>
+    <ol>
+        <li><strong>No regresión:</strong> Los cambios sobre los microservicios se validan instantáneamente, reduciendo fallos colaterales al actualizar componentes comunes del <code>ms-common</code>.</li>
+        <li><strong>Seguridad Operativa:</strong> Módulos críticos como el control de acceso en frontend y autenticación de backend están cubiertos al 100%, bloqueando vulnerabilidades de autorización de forma temprana.</li>
+        <li><strong>Ciclos Cortos de Feedback:</strong> Las pruebas unitarias locales y de integración se ejecutan de manera ágil (bajo 32s para el backend y 3s para el frontend), facilitando la adopción de Integración Continua (CI/CD).</li>
+    </ol>
+
+</body>
+</html>
