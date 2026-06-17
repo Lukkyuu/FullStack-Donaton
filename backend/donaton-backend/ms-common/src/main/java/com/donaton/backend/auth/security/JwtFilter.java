@@ -33,6 +33,11 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
+
+        if (token.isBlank() || "null".equals(token) || "undefined".equals(token)) {
+            chain.doFilter(request, response);
+            return;
+        }
         String email = jwtUtil.extractUsername(token);
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {

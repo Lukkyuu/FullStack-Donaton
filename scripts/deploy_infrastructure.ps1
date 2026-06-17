@@ -2,10 +2,10 @@
 # Script para crear la infraestructura base en la nueva cuenta de AWS
 
 $Region = "us-west-2"
-$VpcId = "vpc-000ee7b829e88a9c3"
-$Subnets = @("subnet-003b24510383b261f", "subnet-05b86282cd09f0088", "subnet-0e54619c9f99db4f1", "subnet-0ff7acd0a0b45d093")
-$SecurityGroupId = "sg-0883759a0ad4f8742"
-$BucketName = "donaton-frontend-bucket-005603512319"
+$VpcId = "vpc-0f7e3b94cf81458e1"
+$Subnets = @("subnet-0b25c9c582f09cec5", "subnet-0ea474dbd91a5b042", "subnet-0fe033f67d596ae22", "subnet-08ddffc1d71606f51")
+$SecurityGroupId = "sg-0de0645feff865664"
+$BucketName = "donaton-frontend-bucket-729867975043"
 $RDSIdentifier = "donaton-db"
 $ClusterName = "donaton-cluster"
 

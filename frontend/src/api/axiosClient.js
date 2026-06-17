@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BFF_URL = import.meta.env.VITE_BFF_URL ?? 'http://donaton-alb-1949998216.us-west-2.elb.amazonaws.com';
+const BFF_URL = import.meta.env.VITE_BFF_URL ?? 'http://donaton-alb-1038273662.us-west-2.elb.amazonaws.com';
 
 if (!BFF_URL) {
   throw new Error('VITE_BFF_URL no está configurada. Define la URL real del gateway para el entorno actual.');
@@ -28,7 +28,7 @@ export const bindAuthHelpers = (get, set, clear) => {
 /* ─── Request interceptor: inyecta Access Token en cada petición ─── */
 apiClient.interceptors.request.use((config) => {
   const token = getAccessToken();
-  if (token) {
+  if (token && token !== 'null' && token !== 'undefined') {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -74,9 +74,9 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
       try {
         const { data } = await apiClient.post('/auth/refresh');
-        setAccessToken(data.accessToken);
-        processQueue(null, data.accessToken);
-        original.headers.Authorization = `Bearer ${data.accessToken}`;
+        setAccessToken(data.token);
+        processQueue(null, data.token);
+        original.headers.Authorization = `Bearer ${data.token}`;
         return apiClient(original);
       } catch (refreshErr) {
         processQueue(refreshErr, null);
