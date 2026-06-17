@@ -59,7 +59,7 @@ export default function ResetPassword() {
       <div className="auth-right-panel" style={{ margin: '0 auto', maxWidth: 600, width: '100%' }}>
         <div className="auth-form-card" style={{ padding: '40px 48px' }}>
           <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <img src={logoUrl} alt="Donaton" style={{ width: 64, height: 64, objectFit: 'contain' }} />
+            <img src={logoUrl} alt="Donaton" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: '50%', border: '2px solid rgba(0,0,0,0.08)', backgroundColor: 'var(--surface-container-lowest)' }} />
           </div>
 
           {!success ? (

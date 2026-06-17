@@ -1,22 +1,34 @@
-Enlace al Repositorio Principal del Proyecto:
-https://github.com/TU_USUARIO/donaton-backend (Reemplaza con tu URL)
+Enlace al Repositorio Principal del Proyecto (Monorepo):
+https://github.com/Lukkyuu/FullStack-Donaton
 
-Descripción de los componentes (monorepo):
-El proyecto sigue una arquitectura de monorepositorio en Maven (Multi-módulo) donde cada carpeta representa un componente independiente:
+Descripción de los componentes (Arquitectura Monorepo):
+El proyecto sigue una arquitectura de monorepositorio que integra el Frontend y un Backend Spring Boot multi-módulo.
 
-1. Frontend:
-https://github.com/TU_USUARIO/donaton-frontend (Si tienes un repositorio separado, ponlo aquí)
-Contiene la interfaz de usuario desarrollada (React/Angular/Vue).
+1. Frontend (React 18 + Vite 5 + Vitest):
+https://github.com/Lukkyuu/FullStack-Donaton/tree/main/frontend
+Cliente de interfaz de usuario para donantes, organizaciones y administradores.
 
-2. Backend For Frontend (BFF):
-https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-gateway
-Actúa como punto de entrada (API Gateway / BFF) centralizando las llamadas del frontend y manejando la distribución y CORS.
+2. API Gateway / BFF (ms-gateway):
+https://github.com/Lukkyuu/FullStack-Donaton/tree/Backend/backend/donaton-backend/ms-gateway
+Puerto: 8080
+Centraliza las llamadas desde el frontend, enrutando a los microservicios y gestionando CORS/Seguridad de borde.
 
-3. Microservicios:
-- Auth: https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-auth (Gestión de Identidad y Seguridad)
-- Donaciones: https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-donacion (Lógica de Donaciones y RabbitMQ)
-- Logística: https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-logistica (Centros de acopio y asignaciones)
-- Necesidad: https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-necesidad (Gestión de beneficiarios)
+3. Librería Compartida / Shared Kernel (ms-common):
+https://github.com/Lukkyuu/FullStack-Donaton/tree/Backend/backend/donaton-backend/ms-common
+Contiene las entidades JPA del negocio, utilidades de seguridad JWT, repositorios base y configuración de almacenamiento en S3.
 
-4. Librería Compartida (Arquetipo Base):
-- Common: https://github.com/TU_USUARIO/donaton-backend/tree/main/ms-common (Modelos de datos y configuración compartida)
+4. Microservicios del Backend:
+- ms-auth (Puerto 8081): https://github.com/Lukkyuu/FullStack-Donaton/tree/Backend/backend/donaton-backend/ms-auth
+  (Gestión de identidad, registro, inicio de sesión JWT y recuperación de contraseñas)
+- ms-donacion (Puerto 8082): https://github.com/Lukkyuu/FullStack-Donaton/tree/Backend/backend/donaton-backend/ms-donacion
+  (Gestión de donaciones y publicación de eventos mediante RabbitMQ)
+- ms-logistica (Puerto 8083): https://github.com/Lukkyuu/FullStack-Donaton/tree/Backend/backend/donaton-backend/ms-logistica
+  (Control de recursos, centros de acopio activos y rutas de distribución)
+- ms-necesidad (Puerto 8084): https://github.com/Lukkyuu/FullStack-Donaton/tree/Backend/backend/donaton-backend/ms-necesidad
+  (Gestión de requerimientos y solicitudes de organizaciones y beneficiarios)
+- ms-usuarios (Puerto 8085): https://github.com/Lukkyuu/FullStack-Donaton/tree/Backend/backend/donaton-backend/ms-usuarios
+  (Gestión y edición de perfiles de usuario, cambio de contraseñas y eliminación de cuentas)
+- ms-matching (Puerto 8086): https://github.com/Lukkyuu/FullStack-Donaton/tree/Backend/backend/donaton-backend/ms-matching
+  (Motor automático de emparejamiento inteligente entre donaciones y necesidades)
+- ms-notificaciones (Puerto 8087): https://github.com/Lukkyuu/FullStack-Donaton/tree/Backend/backend/donaton-backend/ms-notificaciones
+  (Gestión del canal de notificaciones internas y preferencias de recepción por email/SMS)

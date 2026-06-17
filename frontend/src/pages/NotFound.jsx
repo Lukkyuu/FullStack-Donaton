@@ -15,7 +15,7 @@ export default function NotFound() {
 
       <div style={{ textAlign: 'center', maxWidth: 480, position: 'relative', zIndex: 1 }}>
         {/* Logo */}
-        <img src={logoUrl} alt="Donaton" style={{ width: 80, height: 80, objectFit: 'contain', marginBottom: 24, filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }} />
+        <img src={logoUrl} alt="Donaton" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: '50%', border: '3px solid rgba(255, 255, 255, 0.2)', backgroundColor: 'var(--surface-container-lowest)', marginBottom: 24, filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }} />
 
         {/* 404 */}
         <div style={{

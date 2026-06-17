@@ -24,7 +24,7 @@ export default function NotAuthorized() {
       <div style={{ position:'fixed',bottom:-60,left:-40,width:280,height:280,borderRadius:'50%',background:'rgba(216,90,48,0.08)',filter:'blur(50px)',pointerEvents:'none' }} />
 
       <div style={{ textAlign: 'center', maxWidth: 460, position: 'relative', zIndex: 1 }}>
-        <img src={logoUrl} alt="Donaton" style={{ width: 72, height: 72, objectFit: 'contain', marginBottom: 20, filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.4))' }} />
+        <img src={logoUrl} alt="Donaton" style={{ width: 72, height: 72, objectFit: 'cover', borderRadius: '50%', border: '3px solid rgba(255, 255, 255, 0.2)', backgroundColor: 'var(--surface-container-lowest)', marginBottom: 20, filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.4))' }} />
 
         <div style={{ fontSize: 72, marginBottom: 8 }}>🔒</div>
 

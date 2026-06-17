@@ -23,7 +23,11 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
+<<<<<<< HEAD
     "@vitest/coverage-v8": "^4.1.5",
+=======
+    "@vitest/coverage-v8": "^4.1.9",
+>>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
     "jsdom": "^29.1.1",
     "vite": "^5.3.1",
     "vitest": "^4.1.5"

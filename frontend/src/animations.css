@@ -1,0 +1,420 @@
+/* ══════════════════════════════════════════════════════════════
+   DONATON · animations.css
+   Micro-animaciones premium para toda la aplicación
+══════════════════════════════════════════════════════════════ */
+
+/* ── Keyframes base ── */
+@keyframes fadeIn       { from{opacity:0}              to{opacity:1} }
+@keyframes fadeInUp     { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+@keyframes fadeInDown   { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:none} }
+@keyframes fadeInLeft   { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:none} }
+@keyframes fadeInRight  { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:none} }
+@keyframes scaleIn      { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
+@keyframes popIn        { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+@keyframes slideUp      { from{opacity:0;transform:translateY(28px) scale(0.97)} to{opacity:1;transform:none scale(1)} }
+
+/* ── Stagger helpers ── */
+.anim-fade-in          { animation: fadeIn      0.4s ease both; }
+.anim-fade-up          { animation: fadeInUp    0.45s ease both; }
+.anim-fade-down        { animation: fadeInDown  0.4s ease both; }
+.anim-fade-left        { animation: fadeInLeft  0.45s ease both; }
+.anim-fade-right       { animation: fadeInRight 0.45s ease both; }
+.anim-scale-in         { animation: scaleIn     0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+.anim-pop              { animation: popIn       0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+.anim-slide-up         { animation: slideUp     0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+/* ── Delay utilities ── */
+.delay-0   { animation-delay: 0s; }
+.delay-1   { animation-delay: 0.08s; }
+.delay-2   { animation-delay: 0.16s; }
+.delay-3   { animation-delay: 0.24s; }
+.delay-4   { animation-delay: 0.32s; }
+.delay-5   { animation-delay: 0.40s; }
+.delay-6   { animation-delay: 0.48s; }
+.delay-7   { animation-delay: 0.56s; }
+.delay-8   { animation-delay: 0.64s; }
+
+/* ── Shimmer skeleton loader ── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--surface-container) 25%,
+    var(--surface-container-high) 50%,
+    var(--surface-container) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: var(--r-md);
+}
+.skeleton-text  { height: 14px; margin-bottom: 8px; }
+.skeleton-title { height: 22px; width: 60%; margin-bottom: 12px; }
+.skeleton-card  { height: 120px; border-radius: var(--r-lg); }
+
+/* ── Hover lift card ── */
+.hover-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Glow button effect ── */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 4px 14px rgba(0,49,120,0.25); }
+  50%       { box-shadow: 0 6px 24px rgba(0,49,120,0.45), 0 0 0 4px rgba(0,49,120,0.08); }
+}
+.btn-glow { animation: glowPulse 2.4s ease-in-out infinite; }
+
+@keyframes tealGlow {
+  0%, 100% { box-shadow: 0 4px 14px rgba(30,185,128,0.3); }
+  50%       { box-shadow: 0 6px 24px rgba(30,185,128,0.55), 0 0 0 4px rgba(30,185,128,0.1); }
+}
+.btn-teal-glow { animation: tealGlow 2.4s ease-in-out infinite; }
+
+/* ── Floating badge ── */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+.float-anim { animation: floatY 3s ease-in-out infinite; }
+
+/* ── Counter number rollup ── */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+.stat-value { animation: countUp 0.5s ease both; }
+
+/* ── Progress bar fill animation ── */
+@keyframes fillBar {
+  from { width: 0%; }
+}
+.progress-fill-anim { animation: fillBar 1.2s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+/* ── Spinning dot loader ── */
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%            { transform: scale(1.1); opacity: 1; }
+}
+.dots-loader {
+  display: flex; gap: 6px; align-items: center; justify-content: center;
+}
+.dots-loader span {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--primary);
+  animation: dotBounce 1.2s infinite ease-in-out;
+}
+.dots-loader span:nth-child(2) { animation-delay: 0.2s; }
+.dots-loader span:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── Ripple on click ── */
+.ripple-btn {
+  position: relative; overflow: hidden;
+}
+.ripple-btn::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  width: 100px; height: 100px;
+  margin: -50px 0 0 -50px;
+  top: var(--y, 50%); left: var(--x, 50%);
+  animation: rippleEffect 0.6s ease-out;
+  pointer-events: none;
+  opacity: 0;
+}
+@keyframes rippleEffect {
+  from { transform: scale(0); opacity: 0.6; }
+  to   { transform: scale(4); opacity: 0; }
+}
+
+/* ── Notification badge bounce ── */
+@keyframes badgePop {
+  0%   { transform: scale(0); }
+  70%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+.notif-dot { animation: badgePop 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.5s both; }
+
+/* ── Page transition container ── */
+.page-fade-in { animation: fadeInUp 0.35s ease; }
+
+/* ── Card enter stagger ── */
+.card-stagger > * {
+  animation: fadeInUp 0.4s ease both;
+}
+.card-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.card-stagger > *:nth-child(2) { animation-delay: 0.10s; }
+.card-stagger > *:nth-child(3) { animation-delay: 0.15s; }
+.card-stagger > *:nth-child(4) { animation-delay: 0.20s; }
+.card-stagger > *:nth-child(5) { animation-delay: 0.25s; }
+.card-stagger > *:nth-child(6) { animation-delay: 0.30s; }
+
+/* ── Stats grid stagger ── */
+.stats-grid > .stat-card:nth-child(1) { animation: fadeInUp 0.4s ease 0.05s both; }
+.stats-grid > .stat-card:nth-child(2) { animation: fadeInUp 0.4s ease 0.12s both; }
+.stats-grid > .stat-card:nth-child(3) { animation: fadeInUp 0.4s ease 0.19s both; }
+.stats-grid > .stat-card:nth-child(4) { animation: fadeInUp 0.4s ease 0.26s both; }
+
+/* ── Sidebar nav link hover ── */
+/* applied via inline JS in sidebar navlinks */
+
+/* ── Table row appear ── */
+tbody tr {
+  animation: fadeInLeft 0.3s ease both;
+}
+tbody tr:nth-child(1)  { animation-delay: 0.02s; }
+tbody tr:nth-child(2)  { animation-delay: 0.05s; }
+tbody tr:nth-child(3)  { animation-delay: 0.08s; }
+tbody tr:nth-child(4)  { animation-delay: 0.11s; }
+tbody tr:nth-child(5)  { animation-delay: 0.14s; }
+tbody tr:nth-child(6)  { animation-delay: 0.17s; }
+tbody tr:nth-child(7)  { animation-delay: 0.20s; }
+tbody tr:nth-child(8)  { animation-delay: 0.23s; }
+
+/* ── Typing cursor blink ── */
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.cursor-blink::after {
+  content: '|';
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+  color: var(--primary);
+}
+
+/* ── Status badge pulse (real-time) ── */
+@keyframes liveRing {
+  0%   { box-shadow: 0 0 0 0 rgba(30,185,128,0.5); }
+  70%  { box-shadow: 0 0 0 8px rgba(30,185,128,0); }
+  100% { box-shadow: 0 0 0 0 rgba(30,185,128,0); }
+}
+.live-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(30,185,128,0.12); color: #006c48;
+  border-radius: 99px; padding: 3px 12px; font-size: 12px; font-weight: 700;
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #1EB980;
+  animation: liveRing 1.6s ease-out infinite;
+}
+
+/* ── Scroll reveal class (added via JS) ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Modal entrance ── */
+.modal { animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
+.modal-backdrop { animation: fadeIn 0.2s ease both; }
+
+/* ── Number counter animation ── */
+@keyframes numericPop {
+  0%   { transform: scale(0.7) translateY(8px); opacity: 0; }
+  70%  { transform: scale(1.05) translateY(-2px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.stat-value { animation: numericPop 0.55s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+/* ── Tag role pop ── */
+[class^="tag-role-"] { animation: scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1) 0.3s both; }
+
+/* ── Topbar slide down ── */
+.topbar  { animation: fadeInDown 0.4s ease both; }
+
+/* ── Hero gradient shift (subtle) ── */
+@keyframes gradientDrift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.gradient-animate {
+  background-size: 200% 200%;
+  animation: gradientDrift 8s ease infinite;
+}
+
+/* ── Auth form card entrance ── */
+.auth-form-card { animation: slideUp 0.55s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+/* ── Input label float ── */
+.form-group:focus-within .form-label {
+  color: var(--primary);
+  transition: color 0.2s ease;
+}
+
+/* ── Btn press ── */
+.btn { transition: all 0.2s ease; }
+.btn:active { transform: scale(0.95) !important; }
+
+/* ── Icon spin ── */
+@keyframes iconSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.icon-spin { animation: iconSpin 1s linear infinite; }
+
+/* ── Success checkmark draw ── */
+@keyframes checkDraw {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
+.check-icon { stroke-dasharray: 100; animation: checkDraw 0.5s ease-in-out both; }
+
+/* ── Card shimmer hover ── */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.card:hover::before { left: 140%; }
+.card { position: relative; overflow: hidden; }
+
+/* ── Blur-in transition ── */
+@keyframes blurIn {
+  from { filter: blur(8px); opacity: 0; transform: scale(1.03); }
+  to   { filter: blur(0px); opacity: 1; transform: scale(1); }
+}
+.blur-in { animation: blurIn 0.5s ease both; }
+
+/* ── Footer links ── */
+.portal-footer a {
+  position: relative;
+}
+.portal-footer a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1.5px;
+  background: var(--primary);
+  transition: width 0.22s ease;
+}
+.portal-footer a:hover::after { width: 100%; }
+
+/* ── Custom Cursor & Uplink Interactives ── */
+.custom-cursor-dot, .custom-cursor-outline {
+  position: fixed;
+  top: 0; left: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+@media (min-width: 769px) {
+  .custom-cursor-dot, .custom-cursor-outline {
+    display: block;
+  }
+  
+  body.has-custom-cursor {
+    cursor: none !important;
+  }
+  body.has-custom-cursor a,
+  body.has-custom-cursor button,
+  body.has-custom-cursor input,
+  body.has-custom-cursor select,
+  body.has-custom-cursor textarea,
+  body.has-custom-cursor .btn,
+  body.has-custom-cursor [role="button"] {
+    cursor: none !important;
+  }
+}
+
+.custom-cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--vibrant-teal);
+  transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, opacity 0.2s;
+}
+
+.custom-cursor-outline {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--vibrant-teal);
+  transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Expanded state when hover on interactive elements */
+body.cursor-hover .custom-cursor-dot {
+  width: 4px;
+  height: 4px;
+  opacity: 0;
+}
+
+body.cursor-hover .custom-cursor-outline {
+  width: 52px;
+  height: 52px;
+  background-color: rgba(30, 185, 128, 0.08);
+  border-color: var(--vibrant-teal);
+  border-width: 1px;
+}
+
+/* Specific styling when hovering text or inputs */
+body.cursor-text-hover .custom-cursor-outline {
+  width: 20px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: transparent;
+  border-color: var(--primary);
+  border-width: 1px;
+}
+
+/* Magnetic Button utility */
+.magnetic-btn {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+/* Text reveal split animation */
+.reveal-word-wrapper {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  margin-right: 0.22em;
+}
+
+.reveal-word {
+  display: inline-block;
+  transform: translateY(105%);
+  opacity: 0;
+  animation: revealWordUp 0.85s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.reveal-word-gradient {
+  background: linear-gradient(90deg, #1EB980, #70f8ba);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes revealWordUp {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Parallax scroll classes */
+.parallax-bg {
+  transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+

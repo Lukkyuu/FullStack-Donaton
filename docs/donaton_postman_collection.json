@@ -1,0 +1,487 @@
+{
+  "info": {
+    "name": "Donaton API Collection",
+    "description": "Colección completa de endpoints para el ecosistema de microservicios de Donatón, enrutados mediante el API Gateway (BFF).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Autenticación (ms-auth)",
+      "item": [
+        {
+          "name": "Registrar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"donante.demo@donaton.org\",\n  \"password\": \"password123\",\n  \"nombre\": \"Juan Donante\",\n  \"rol\": \"DONANTE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Iniciar Sesión",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"donante.demo@donaton.org\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener Usuario Actual (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Donaciones (ms-donacion)",
+      "item": [
+        {
+          "name": "Crear Donación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Cajas de arroz y legumbres no perecibles\",\n  \"categoria\": \"ALIMENTO\",\n  \"tipoDonacion\": \"ALIMENTO\",\n  \"unidad\": \"cajas\",\n  \"cantidad\": 10,\n  \"zona\": \"RM\",\n  \"centroAcopioId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/donaciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "donaciones"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Todas las Donaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/donaciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "donaciones"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Mis Donaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/donaciones/mis-donaciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "donaciones",
+                "mis-donaciones"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Logística (ms-logistica)",
+      "item": [
+        {
+          "name": "Obtener Centros de Acopio Activos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/logistica/centros",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "logistica",
+                "centros"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener Inventario de Recursos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/logistica/recursos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "logistica",
+                "recursos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Asignar Centro de Acopio a Donación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/logistica/donaciones/1/asignar/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "logistica",
+                "donaciones",
+                "1",
+                "asignar",
+                "2"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Necesidades (ms-necesidad)",
+      "item": [
+        {
+          "name": "Listar Necesidades Activas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/necesidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "necesidades"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear Requerimiento de Ayuda",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Medicamentos e insumos de primeros auxilios\",\n  \"categoria\": \"MEDICINA\",\n  \"urgencia\": \"ALTA\",\n  \"unidad\": \"cajas\",\n  \"cantidadRequerida\": 50,\n  \"zona\": \"Valparaíso\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/necesidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "necesidades"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuarios (ms-usuarios)",
+      "item": [
+        {
+          "name": "Obtener Perfil Completo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/perfil",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "perfil"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Nombre de Perfil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Pérez Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/perfil",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "perfil"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Motor de Emparejamiento (ms-matching)",
+      "item": [
+        {
+          "name": "Crear Propuesta de Matching",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"donacionId\": 1,\n  \"necesidadId\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/matching",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "matching"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Historial de Matchings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/matching/resultados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "matching",
+                "resultados"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notificaciones (ms-notificaciones)",
+      "item": [
+        {
+          "name": "Consultar Mis Alertas e Historial",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/notificaciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "notificaciones"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Guardar Preferencias de Notificación",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"canales\": {\n    \"email\": true,\n    \"push\": true,\n    \"sms\": false\n  },\n  \"eventos\": {\n    \"nueva_donacion\": true,\n    \"matching_realizado\": true,\n    \"donacion_entregada\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/notificaciones/preferencias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "notificaciones",
+                "preferencias"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "reemplazar_por_jwt_retornado_en_login",
+      "type": "string"
+    }
+  ]
+}
