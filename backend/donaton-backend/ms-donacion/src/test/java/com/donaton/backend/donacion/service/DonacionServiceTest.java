@@ -1,11 +1,6 @@
 package com.donaton.backend.donacion.service;
 
 import static org.junit.jupiter.api.Assertions.*;
-<<<<<<< HEAD
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-=======
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -23,105 +18,39 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
 import com.donaton.backend.auth.model.Usuario;
 import com.donaton.backend.auth.repository.UsuarioRepository;
 import com.donaton.backend.donacion.dto.DonacionDTO;
 import com.donaton.backend.donacion.messaging.DonacionPublisher;
 import com.donaton.backend.donacion.model.Donacion;
 import com.donaton.backend.donacion.repository.DonacionRepository;
-<<<<<<< HEAD
-import com.donaton.backend.logistica.repository.CentroAcopioRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.util.List;
-import java.util.Optional;
-
-@ExtendWith(MockitoExtension.class)
-=======
 import com.donaton.backend.logistica.model.CentroAcopio;
 import com.donaton.backend.logistica.repository.CentroAcopioRepository;
 
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
 class DonacionServiceTest {
 
     @Mock
     private DonacionRepository donacionRepository;
-<<<<<<< HEAD
-
-    @Mock
-    private UsuarioRepository usuarioRepository;
-
-    @Mock
-    private CentroAcopioRepository centroAcopioRepository;
-
-=======
     @Mock
     private UsuarioRepository usuarioRepository;
     @Mock
     private CentroAcopioRepository centroAcopioRepository;
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
     @Mock
     private DonacionPublisher donacionPublisher;
 
     @InjectMocks
     private DonacionService donacionService;
 
-<<<<<<< HEAD
-    private Usuario mockDonante;
-    private SecurityContext previousContext;
-
-    @BeforeEach
-    void setUp() {
-        previousContext = SecurityContextHolder.getContext();
-        mockDonante = Usuario.builder()
-                .id(3L)
-                .email("donante@donaton.cl")
-                .nombre("Juan Pérez")
-                .rol(Usuario.Rol.DONANTE)
-                .build();
-=======
     private SecurityContext originalContext;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         originalContext = SecurityContextHolder.getContext();
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
     }
 
     @AfterEach
     void tearDown() {
-<<<<<<< HEAD
-        SecurityContextHolder.setContext(previousContext);
-    }
-
-    @Test
-    void crearShouldSaveAndPublishDonation() {
-        SecurityContext context = mock(SecurityContext.class);
-        Authentication auth = mock(Authentication.class);
-        when(context.getAuthentication()).thenReturn(auth);
-        when(auth.getName()).thenReturn("donante@donaton.cl");
-        SecurityContextHolder.setContext(context);
-
-        when(usuarioRepository.findByEmail("donante@donaton.cl")).thenReturn(Optional.of(mockDonante));
-
-        DonacionDTO.Request request = new DonacionDTO.Request();
-        request.setDescripcion("Ropa de abrigo");
-        request.setTipoDonacion("ROPA");
-        request.setUnidad("cajas");
-        request.setZona("Valparaíso");
-        request.setCantidad(5);
-=======
         SecurityContextHolder.setContext(originalContext);
     }
 
@@ -147,80 +76,17 @@ class DonacionServiceTest {
         request.setUnidad("piezas");
         request.setZona("RM");
         request.setCantidad(20);
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
 
         DonacionDTO.Response response = donacionService.crear(request);
 
         assertNotNull(response);
-<<<<<<< HEAD
-        assertEquals("PENDIENTE", response.getEstado());
-        assertEquals("Ropa de abrigo", response.getDescripcion());
-        assertEquals("Juan Pérez", response.getDonanteNombre());
-
-        verify(donacionRepository).save(any(Donacion.class));
-=======
         assertEquals("Juan Donante", response.getDonanteNombre());
         assertEquals("Centro Test", response.getCentroAcopioNombre());
         assertEquals("PENDIENTE", response.getEstado());
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
         verify(donacionPublisher).publicarDonacion(any(DonacionDTO.Response.class));
     }
 
     @Test
-<<<<<<< HEAD
-    void listarTodasShouldMergeMockAndDbDonations() {
-        Donacion dbDonation = Donacion.builder()
-                .id(10L)
-                .descripcion("Medicinas")
-                .categoria("MEDICINA")
-                .estado(Donacion.EstadoDonacion.PENDIENTE)
-                .build();
-
-        when(donacionRepository.findAll()).thenReturn(List.of(dbDonation));
-
-        List<DonacionDTO.Response> list = donacionService.listarTodas();
-
-        assertNotNull(list);
-        assertTrue(list.size() >= 3); // Mock list (2) + DB list (1)
-        assertTrue(list.stream().anyMatch(d -> d.getId().equals(10L)));
-    }
-
-    @Test
-    void obtenerPorIdShouldReturnCorrectDonation() {
-        Donacion dbDonation = Donacion.builder()
-                .id(15L)
-                .descripcion("Comida")
-                .categoria("ALIMENTO")
-                .estado(Donacion.EstadoDonacion.PENDIENTE)
-                .build();
-
-        when(donacionRepository.findById(15L)).thenReturn(Optional.of(dbDonation));
-
-        DonacionDTO.Response response = donacionService.obtenerPorId(15L);
-
-        assertNotNull(response);
-        assertEquals(15L, response.getId());
-        assertEquals("Comida", response.getDescripcion());
-    }
-
-    @Test
-    void actualizarEstadoShouldChangeDonationState() {
-        Donacion dbDonation = Donacion.builder()
-                .id(1L)
-                .descripcion("Frazadas")
-                .categoria("ROPA")
-                .estado(Donacion.EstadoDonacion.PENDIENTE)
-                .build();
-
-        when(donacionRepository.findById(1L)).thenReturn(Optional.of(dbDonation));
-
-        DonacionDTO.Response response = donacionService.actualizarEstado(1L, "ENTREGADA");
-
-        assertNotNull(response);
-        assertEquals("ENTREGADA", response.getEstado());
-        verify(donacionRepository).save(dbDonation);
-    }
-=======
     void crearDonacionAnonymousUser() {
         SecurityContextHolder.clearContext();
 
@@ -332,5 +198,4 @@ class DonacionServiceTest {
         DonacionDTO.Response stateUpdated = donacionService.actualizarEstado(1L, "APROBADO");
         assertEquals("APROBADO", stateUpdated.getEstado());
     }
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
 }

@@ -1,37 +1,13 @@
 package com.donaton.backend.auth.service;
 
 import static org.junit.jupiter.api.Assertions.*;
-<<<<<<< HEAD
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-=======
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Map;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
-import com.donaton.backend.auth.dto.AuthDTO;
-import com.donaton.backend.auth.model.PasswordResetToken;
-import com.donaton.backend.auth.model.Usuario;
-import com.donaton.backend.auth.repository.PasswordResetTokenRepository;
-import com.donaton.backend.auth.repository.UsuarioRepository;
-import com.donaton.backend.auth.security.JwtUtil;
-import com.donaton.backend.auth.security.UserDetailsServiceImpl;
-<<<<<<< HEAD
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,18 +19,19 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
+import com.donaton.backend.auth.dto.AuthDTO;
+import com.donaton.backend.auth.model.PasswordResetToken;
+import com.donaton.backend.auth.model.Usuario;
+import com.donaton.backend.auth.repository.PasswordResetTokenRepository;
+import com.donaton.backend.auth.repository.UsuarioRepository;
+import com.donaton.backend.auth.security.JwtUtil;
+import com.donaton.backend.auth.security.UserDetailsServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
-=======
-
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
 class AuthServiceTest {
 
     @Mock
     private UsuarioRepository usuarioRepository;
-<<<<<<< HEAD
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -71,25 +48,12 @@ class AuthServiceTest {
     @Mock
     private JdbcTemplate jdbcTemplate;
 
-=======
-    @Mock
-    private PasswordEncoder passwordEncoder;
-    @Mock
-    private JwtUtil jwtUtil;
-    @Mock
-    private AuthenticationManager authenticationManager;
-    @Mock
-    private UserDetailsServiceImpl userDetailsService;
-    @Mock
-    private JdbcTemplate jdbcTemplate;
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
     @Mock
     private PasswordResetTokenRepository tokenRepository;
 
     @InjectMocks
     private AuthService authService;
 
-<<<<<<< HEAD
     private Usuario mockUser;
 
     @BeforeEach
@@ -120,10 +84,7 @@ class AuthServiceTest {
         assertEquals("Test User", response.getNombre());
         assertEquals("DONANTE", response.getRol());
 
-=======
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
     }
 
     @Test
@@ -139,84 +100,10 @@ class AuthServiceTest {
         assertEquals("admin-token", response.getToken());
         assertEquals("admin@donaton.org", response.getEmail());
         assertEquals("ADMIN", response.getRol());
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
     }
 
     @Test
-<<<<<<< HEAD
-    void registerShouldThrowExceptionWhenEmailExists() {
-        AuthDTO.RegisterRequest request = new AuthDTO.RegisterRequest();
-        request.setEmail("test@donaton.org");
-        request.setPassword("password123");
-        request.setNombre("Test User");
-        request.setRol("DONANTE");
-
-        when(usuarioRepository.existsByEmail(request.getEmail())).thenReturn(true);
-
-        assertThrows(RuntimeException.class, () -> authService.register(request));
-        verify(usuarioRepository, never()).save(any());
-    }
-
-    @Test
-    void registerShouldSaveUserAndReturnResponseOnSuccess() {
-        AuthDTO.RegisterRequest request = new AuthDTO.RegisterRequest();
-        request.setEmail("new@donaton.org");
-        request.setPassword("password123");
-        request.setNombre("New User");
-        request.setRol("DONANTE");
-
-        Usuario savedUser = Usuario.builder()
-                .id(2L)
-                .email("new@donaton.org")
-                .nombre("New User")
-                .password("encoded_pass")
-                .rol(Usuario.Rol.DONANTE)
-                .build();
-
-        when(usuarioRepository.existsByEmail(request.getEmail())).thenReturn(false);
-        when(passwordEncoder.encode(request.getPassword())).thenReturn("encoded_pass");
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(savedUser);
-        when(jwtUtil.generateToken(any(Usuario.class))).thenReturn("new_mock_token");
-
-        AuthDTO.AuthResponse response = authService.register(request);
-
-        assertNotNull(response);
-        assertEquals("new_mock_token", response.getToken());
-        assertEquals("new@donaton.org", response.getEmail());
-        assertEquals("New User", response.getNombre());
-=======
-    void loginWithExistingUser() {
-        AuthDTO.LoginRequest request = new AuthDTO.LoginRequest();
-        request.setEmail("user@donaton.org");
-        request.setPassword("password");
-
-        Usuario user = Usuario.builder()
-                .id(1L)
-                .email("user@donaton.org")
-                .nombre("Test User")
-                .rol(Usuario.Rol.DONANTE)
-                .build();
-
-        when(usuarioRepository.findByEmail("user@donaton.org")).thenReturn(Optional.of(user));
-        when(jwtUtil.generateToken(user)).thenReturn("user-token");
-
-        AuthDTO.AuthResponse response = authService.login(request);
-
-        assertEquals("user-token", response.getToken());
-        assertEquals("user@donaton.org", response.getEmail());
-        assertEquals("Test User", response.getNombre());
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
-        assertEquals("DONANTE", response.getRol());
-    }
-
-    @Test
-<<<<<<< HEAD
-    void recuperarPasswordShouldDoNothingIfEmailNotExists() {
-        when(usuarioRepository.findByEmail("nonexistent@donaton.org")).thenReturn(Optional.empty());
-
-        authService.recuperarPassword("nonexistent@donaton.org");
-=======
     void loginWithNonExistingUserCreatesFallback() {
         AuthDTO.LoginRequest request = new AuthDTO.LoginRequest();
         request.setEmail("newuser@donaton.org");
@@ -231,19 +118,21 @@ class AuthServiceTest {
         assertEquals("newuser@donaton.org", response.getEmail());
         assertEquals("Newuser", response.getNombre());
         assertEquals("DONANTE", response.getRol());
+        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
     }
 
     @Test
-    void registerWithExistingEmailThrowsException() {
+    void registerShouldThrowExceptionWhenEmailExists() {
         AuthDTO.RegisterRequest request = new AuthDTO.RegisterRequest();
-        request.setEmail("duplicate@donaton.org");
-        request.setPassword("password");
-        request.setNombre("Duplicate");
+        request.setEmail("test@donaton.org");
+        request.setPassword("password123");
+        request.setNombre("Test User");
         request.setRol("DONANTE");
 
-        when(usuarioRepository.existsByEmail("duplicate@donaton.org")).thenReturn(true);
+        when(usuarioRepository.existsByEmail(request.getEmail())).thenReturn(true);
 
         assertThrows(RuntimeException.class, () -> authService.register(request));
+        verify(usuarioRepository, never()).save(any());
     }
 
     @Test
@@ -337,21 +226,12 @@ class AuthServiceTest {
         when(usuarioRepository.findByEmail("notfound@donaton.org")).thenReturn(Optional.empty());
 
         authService.recuperarPassword("notfound@donaton.org");
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
 
         verify(tokenRepository, never()).deleteByUsuarioId(anyLong());
         verify(tokenRepository, never()).save(any());
     }
 
     @Test
-<<<<<<< HEAD
-    void recuperarPasswordShouldCreateTokenIfEmailExists() {
-        when(usuarioRepository.findByEmail("test@donaton.org")).thenReturn(Optional.of(mockUser));
-
-        authService.recuperarPassword("test@donaton.org");
-
-        verify(tokenRepository).deleteByUsuarioId(mockUser.getId());
-=======
     void recuperarPasswordWithExistingEmail() {
         Usuario user = Usuario.builder()
                 .id(456L)
@@ -363,49 +243,10 @@ class AuthServiceTest {
         authService.recuperarPassword("found@donaton.org");
 
         verify(tokenRepository).deleteByUsuarioId(456L);
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
         verify(tokenRepository).save(any(PasswordResetToken.class));
     }
 
     @Test
-<<<<<<< HEAD
-    void resetPasswordShouldThrowExceptionIfTokenNotFound() {
-        when(tokenRepository.findByToken("invalid_token")).thenReturn(Optional.empty());
-
-        assertThrows(RuntimeException.class, () -> authService.resetPassword("invalid_token", "newPass"));
-    }
-
-    @Test
-    void resetPasswordShouldThrowExceptionIfTokenExpired() {
-        PasswordResetToken expiredToken = PasswordResetToken.builder()
-                .token("expired_token")
-                .usuario(mockUser)
-                .expiryDate(LocalDateTime.now().minusMinutes(5))
-                .build();
-
-        when(tokenRepository.findByToken("expired_token")).thenReturn(Optional.of(expiredToken));
-
-        assertThrows(RuntimeException.class, () -> authService.resetPassword("expired_token", "newPass"));
-        verify(tokenRepository).delete(expiredToken);
-    }
-
-    @Test
-    void resetPasswordShouldUpdatePasswordOnSuccess() {
-        PasswordResetToken validToken = PasswordResetToken.builder()
-                .token("valid_token")
-                .usuario(mockUser)
-                .expiryDate(LocalDateTime.now().plusMinutes(15))
-                .build();
-
-        when(tokenRepository.findByToken("valid_token")).thenReturn(Optional.of(validToken));
-        when(passwordEncoder.encode("newPassword")).thenReturn("new_encoded_pass");
-
-        authService.resetPassword("valid_token", "newPassword");
-
-        assertEquals("new_encoded_pass", mockUser.getPassword());
-        verify(usuarioRepository).save(mockUser);
-        verify(tokenRepository).delete(validToken);
-=======
     void resetPasswordWithInvalidTokenThrows() {
         when(tokenRepository.findByToken("invalid")).thenReturn(Optional.empty());
 
@@ -447,6 +288,5 @@ class AuthServiceTest {
         assertEquals("hashed-new-pwd", user.getPassword());
         verify(usuarioRepository).save(user);
         verify(tokenRepository).delete(token);
->>>>>>> ab27ba8593ca528dd7d8b1dc2b9ec21aa96c741d
     }
 }
