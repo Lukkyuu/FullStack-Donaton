@@ -133,7 +133,7 @@ jobs:
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def-notificaciones.outputs.task-definition }}
-        service: donaton-backend-service-v2
+        service: donaton-backend-service
         cluster: donaton-cluster
         wait-for-service-stability: true
   build-frontend:
@@ -167,4 +167,4 @@ jobs:
         aws-region: us-west-2
         
     - name: Deploy to S3
-      run: aws s3 sync dist/ s3://donaton-frontend-bucket-005603512319/ --delete
+      run: aws s3 sync dist/ s3://donaton-frontend-bucket-729867975043/ --delete
