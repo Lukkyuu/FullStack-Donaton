@@ -99,6 +99,60 @@ services:
     networks:
       - donaton-network
 
+  ms-usuarios:
+    build: 
+      context: ./ms-usuarios
+    container_name: donaton-ms-usuarios
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/donaton
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SERVER_PORT=8085
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - donaton-network
+
+  ms-matching:
+    build: 
+      context: ./ms-matching
+    container_name: donaton-ms-matching
+    ports:
+      - "8086:8086"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/donaton
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SERVER_PORT=8086
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - donaton-network
+
+  ms-notificaciones:
+    build: 
+      context: ./ms-notificaciones
+    container_name: donaton-ms-notificaciones
+    ports:
+      - "8087:8087"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/donaton
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SERVER_PORT=8087
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - donaton-network
+
   ms-gateway:
     build: 
       context: ./ms-gateway
@@ -114,12 +168,15 @@ services:
       - NOTIFICACIONES_HOST=${NOTIFICACIONES_HOST:-ms-notificaciones}
       - FRONTEND_ORIGIN=${FRONTEND_ORIGIN:-http://donaton-frontend-bucket-005603512319.s3-website-us-west-2.amazonaws.com}
       - FRONTEND_ORIGINS=${FRONTEND_ORIGINS:-http://donaton-frontend-bucket-005603512319.s3-website-us-west-2.amazonaws.com}
-      - USUARIOS_HOST=${USUARIOS_HOST:-172.31.5.156}
+      - USUARIOS_HOST=${USUARIOS_HOST:-ms-usuarios}
     depends_on:
       - ms-auth
       - ms-donacion
       - ms-logistica
       - ms-necesidad
+      - ms-usuarios
+      - ms-matching
+      - ms-notificaciones
     networks:
       - donaton-network
 

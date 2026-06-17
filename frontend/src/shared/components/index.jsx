@@ -1,12 +1,5 @@
 /* ── LoadingSpinner ── */
-export function LoadingSpinner({ text = 'Cargando...' }) {
-  return (
-    <div className="loading-center">
-      <div className="spinner" />
-      <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>{text}</span>
-    </div>
-  );
-}
+export { default as LoadingSpinner } from './LoadingSpinner.jsx';
 
 /* ── DegradedBanner ── */
 export function DegradedBanner({ show, prominent = false }) {
