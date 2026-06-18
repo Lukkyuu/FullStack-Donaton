@@ -105,23 +105,7 @@ public class DonacionService {
             }
         }
 
-        DonacionDTO.Response response = DonacionDTO.Response.builder()
-                .id((long) (MOCK_DONACIONES.size() + 100))
-                .donanteNombre(donanteNombre)
-                .centroAcopioNombre(centroNombre)
-                .descripcion(request.getDescripcion())
-                .categoria(request.getCategoria() != null ? request.getCategoria() : request.getTipoDonacion())
-                .tipoDonacion(request.getTipoDonacion() != null ? request.getTipoDonacion() : request.getCategoria())
-                .unidad(request.getUnidad())
-                .zona(request.getZona())
-                .necesidadId(request.getNecesidadId())
-                .cantidad(request.getCantidad())
-                .estado("PENDIENTE")
-                .fechaCreacion(java.time.LocalDateTime.now())
-                .build();
-
-        MOCK_DONACIONES.add(response);
-
+        Donacion donacionGuardada = null;
         if (donante != null) {
             try {
                 Donacion donacion = Donacion.builder()
@@ -136,11 +120,28 @@ public class DonacionService {
                         .cantidad(request.getCantidad())
                         .estado(Donacion.EstadoDonacion.PENDIENTE)
                         .build();
-                donacionRepository.save(donacion);
+                donacionGuardada = donacionRepository.save(donacion);
             } catch (Exception e) {
                 System.err.println("DB Save for Donacion failed: " + e.getMessage());
             }
         }
+
+        DonacionDTO.Response response = DonacionDTO.Response.builder()
+                .id(donacionGuardada != null ? donacionGuardada.getId() : (long) (MOCK_DONACIONES.size() + 100))
+                .donanteNombre(donanteNombre)
+                .centroAcopioNombre(centroNombre)
+                .descripcion(request.getDescripcion())
+                .categoria(request.getCategoria() != null ? request.getCategoria() : request.getTipoDonacion())
+                .tipoDonacion(request.getTipoDonacion() != null ? request.getTipoDonacion() : request.getCategoria())
+                .unidad(request.getUnidad())
+                .zona(request.getZona())
+                .necesidadId(request.getNecesidadId())
+                .cantidad(request.getCantidad())
+                .estado("PENDIENTE")
+                .fechaCreacion(java.time.LocalDateTime.now())
+                .build();
+
+        MOCK_DONACIONES.add(response);
 
         try {
             donacionPublisher.publicarDonacion(response);
