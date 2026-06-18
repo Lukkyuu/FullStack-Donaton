@@ -163,8 +163,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: us-west-2
         
     - name: Deploy to S3
-      run: aws s3 sync dist/ s3://donaton-frontend-bucket-005603512319/ --delete
+      run: aws s3 sync dist/ s3://donaton-frontend-bucket-729867975043/ --delete
