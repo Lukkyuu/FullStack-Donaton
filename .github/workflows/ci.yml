@@ -33,7 +33,6 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: us-west-2
 
     - name: Login to Amazon ECR
@@ -133,7 +132,7 @@ jobs:
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def-notificaciones.outputs.task-definition }}
-        service: donaton-backend-service-v2
+        service: donaton-backend-service
         cluster: donaton-cluster
         wait-for-service-stability: true
   build-frontend:
